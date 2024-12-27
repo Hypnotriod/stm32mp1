@@ -124,6 +124,7 @@ rm ${OUTPUT_BUILD_DIR}/install_artifact/lib/modules/6.6.48/build
 cp ${OUTPUT_BUILD_DIR}/arch/${ARCH}/boot/${IMAGE_KERNEL} ${OUTPUT_BUILD_DIR}/install_artifact/boot/
 find ${OUTPUT_BUILD_DIR}/arch/${ARCH}/boot/dts/ -name 'st*.dtb' -exec cp '{}' ${OUTPUT_BUILD_DIR}/install_artifact/boot/dtbs/ \;
 ```
+Artifacts:
 * linux/build/install_artifact/boot/uImage
 * linux/build/install_artifact/boot/dtbs/stm32mp157f-dk2.dtb
 * linux/build/install_artifact/lib/modules/6.6.48/
