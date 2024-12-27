@@ -32,7 +32,6 @@ cd u-boot/
 source ${WORKSPACE_DIR}/sdk/environment-setup
 export KBUILD_OUTPUT=${UBOOT_DIR}/out
 make distclean
-# make stm32mp15_trusted_defconfig
 make stm32mp15_defconfig
 make DEVICE_TREE=${MACHINE} all
 ```
