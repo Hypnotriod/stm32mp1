@@ -13,7 +13,6 @@ export MACHINE=stm32mp157f-dk2
 * [STM32MPU Developer Package](https://wiki.st.com/stm32mpu/wiki/STM32MPU_Developer_Package#Installing_the_SDK)
 * [Download the SDK](https://www.st.com/en/embedded-software/stm32mp1dev.html#get-software)
 ```bash
-
 cd ${WORKSPACE_DIR}
 tar xvf en.SDK-x86_64-stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.tar.gz
 chmod +x stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06/sdk/st-image-weston-openstlinux-weston-stm32mp1.rootfs-x86_64-toolchain-5.0.3-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.sh
@@ -28,7 +27,6 @@ sudo apt install libncurses5-dev libncursesw5-dev libyaml-dev u-boot-tools
 * [STM32MP15 U-Boot build](https://wiki.st.com/stm32mpu/wiki/U-Boot_overview#U-Boot_build)
 ```bash
 cd ${WORKSPACE_DIR}
-
 git clone -b v2023.10-stm32mp https://github.com/STMicroelectronics/u-boot --depth=1
 cd u-boot/
 source ${WORKSPACE_DIR}/sdk/environment-setup
@@ -47,7 +45,6 @@ Artifacts:
 cd ${WORKSPACE_DIR}
 # git clone -b 4.0.0-stm32mp https://github.com/STMicroelectronics/optee_os.git --depth=1
 git clone -b 3.19.0-stm32mp-r2.1 https://github.com/STMicroelectronics/optee_os.git --depth=1
-
 cd optee_os/
 source ${WORKSPACE_DIR}/sdk/environment-setup
 unset LDFLAGS;
