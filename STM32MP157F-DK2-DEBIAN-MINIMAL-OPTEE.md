@@ -40,6 +40,7 @@ Artifacts:
 * u-boot/out/u-boot-nodtb.bin
 
 # OP-TEE
+* [How to build OP-TEE components](https://wiki.st.com/stm32mpu/wiki/How_to_build_OP-TEE_components)
 ```bash
 cd ${WORKSPACE_DIR}
 # git clone -b 4.0.0-stm32mp https://github.com/STMicroelectronics/optee_os.git --depth=1
