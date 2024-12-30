@@ -69,6 +69,7 @@ unset LDFLAGS;
 unset CFLAGS;
 make realclean
 make PLAT=stm32mp1 \
+    STM32MP13=0
     STM32MP15=1 \
     STM32MP_SDMMC=1 \
     STM32MP_EMMC=0 \
@@ -134,13 +135,23 @@ tar xf debian-12.1-minimal-armhf-2023-08-22.tar.xz
 ```
 
 # Populate the SD card
-* [Flash Layout SD card](https://wiki.st.com/stm32mpu/wiki/STM32CubeProgrammer_flashlayout#SD_card)
-* [STM32 MPU Flash mapping](https://wiki.st.com/stm32mpu/wiki/STM32_MPU_Flash_mapping)
+* [Flash Layout SD card](https://wiki.st.com/stm32mpu/wiki/STM32CubeProgrammer_flashlayout#SD_card)  
+* [STM32 MPU Flash mapping](https://wiki.st.com/stm32mpu/wiki/STM32_MPU_Flash_mapping)  
+
+Call `lsblk` to determine the device entry for the SD card.  
+In case of `/dev/sdX` do:
+```bash
+export DISK=/dev/sdX
+export DISK_P=${DISK}
+```
+In case of `/dev/mmcblkX` do:
+```bash
+export DISK=/dev/mmcblkX
+export DISK_P=${DISK}p
+```
 ```bash
 cd ${WORKSPACE_DIR}
-lsblk
-export DISK=/dev/sdX
-umount ${DISK}X
+umount ${DISK_P}X
 sudo dd if=/dev/zero of=${DISK} bs=1M count=10
 sudo sgdisk -o ${DISK}
 sudo sgdisk --resize-table=128 -a 1 \
@@ -151,11 +162,11 @@ sudo sgdisk --resize-table=128 -a 1 \
     -n 5:6178:     -c 5:rootfs  \
     -A 5:set:2                  \
     -p ${DISK}
-sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 of=${DISK}1
-sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 of=${DISK}2
-sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK}3
-sudo dd if=/dev/zero of=${DISK}4 bs=512K count=1
-sudo mkfs.ext4 -L rootfs ${DISK}5
+sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 of=${DISK_P}1
+sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 of=${DISK_P}2
+sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}3
+sudo dd if=/dev/zero of=${DISK_P}4 bs=512K count=1
+sudo mkfs.ext4 -L rootfs ${DISK_P}5
 sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C /media/${USER}/rootfs/
 sync
 sudo mkdir -p /media/${USER}/rootfs/boot/extlinux/
