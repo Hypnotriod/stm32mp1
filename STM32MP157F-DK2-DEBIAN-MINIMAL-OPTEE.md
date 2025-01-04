@@ -69,7 +69,7 @@ unset LDFLAGS;
 unset CFLAGS;
 make realclean
 make PLAT=stm32mp1 \
-    STM32MP13=0
+    STM32MP13=0 \
     STM32MP15=1 \
     STM32MP_SDMMC=1 \
     STM32MP_EMMC=0 \
