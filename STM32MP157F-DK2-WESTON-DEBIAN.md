@@ -4,7 +4,7 @@
 * [weston.ini](https://manpages.ubuntu.com/manpages/focal/man5/weston.ini.5.html)
 * [VivanteGPUIP](https://www.verisilicon.com/en/IPPortfolio/VivanteGPUIP)
 
-# Copy the GPU drivers to SD card
+# Copy the GPU drivers to the SD card
 ```bash
 sudo cp -r sdk/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* /media/${USER}/rootfs/lib
 ```
