@@ -149,10 +149,22 @@ In case of `/dev/mmcblkX` do:
 export DISK=/dev/mmcblkX
 export DISK_P=${DISK}p
 ```
+Also unmount all the previous SD card partitions and erase the partition table:
 ```bash
-cd ${WORKSPACE_DIR}
 umount ${DISK_P}X
 sudo dd if=/dev/zero of=${DISK} bs=1M count=10
+```
+Alternatively to make the 4GB image file using the loop device do:
+```bash
+cd ${WORKSPACE_DIR}
+export IMAGE_FILE=${MACHINE}-sdcard.img
+dd if=/dev/zero of=${IMAGE_FILE} bs=1G count=4
+DISK=$(sudo losetup --partscan --show --find ${IMAGE_FILE})
+export DISK_P=${DISK}p
+```
+Format the disk and populate with the artifacts:
+```bash
+cd ${WORKSPACE_DIR}
 sudo sgdisk -o ${DISK}
 sudo sgdisk --resize-table=128 -a 1 \
     -n 1:34:545    -c 1:fsbl1   \
@@ -167,17 +179,18 @@ sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 o
 sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}3
 sudo dd if=/dev/zero of=${DISK_P}4 bs=512K count=1
 sudo mkfs.ext4 -L rootfs ${DISK_P}5
-# Mount the rootfs partition
-sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C /media/${USER}/rootfs/
+# Mount the rootfs partition. The default /media/${USER}/rootfs is used.
+export ROOTFS=/media/${USER}/rootfs
+sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C ${ROOTFS}/
 sync
-sudo mkdir -p /media/${USER}/rootfs/boot/extlinux/
-sudo sh -c "echo 'LABEL Linux' > /media/${USER}/rootfs/boot/extlinux/extlinux.conf"
-sudo sh -c "echo '    KERNEL /boot/uImage' >> /media/${USER}/rootfs/boot/extlinux/extlinux.conf"
-sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=/dev/mmcblk0p5 rw rootfstype=ext4 rootwait' >> /media/${USER}/rootfs/boot/extlinux/extlinux.conf"
-sudo sh -c "echo '    FDTDIR /boot/dtbs' >> /media/${USER}/rootfs/boot/extlinux/extlinux.conf"
-sudo cp -rv ./linux/build/install_artifact/boot/* /media/${USER}/rootfs/boot/
-sudo cp -rv ./linux/build/install_artifact/lib/* /media/${USER}/rootfs/lib/
-sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-rw  0  1' >> /media/${USER}/rootfs/etc/fstab"
+sudo mkdir -p ${ROOTFS}/boot/extlinux/
+sudo sh -c "echo 'LABEL Linux' > ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo '    KERNEL /boot/uImage' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=/dev/mmcblk0p5 rw rootfstype=ext4 rootwait' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo '    FDTDIR /boot/dtbs' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo cp -rv ./linux/build/install_artifact/boot/* ${ROOTFS}/boot/
+sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
+sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-rw  0  1' >> ${ROOTFS}/etc/fstab"
 sync
 ```
 
