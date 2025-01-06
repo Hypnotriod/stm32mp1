@@ -167,6 +167,7 @@ sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 o
 sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}3
 sudo dd if=/dev/zero of=${DISK_P}4 bs=512K count=1
 sudo mkfs.ext4 -L rootfs ${DISK_P}5
+# Mount the rootfs partition
 sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C /media/${USER}/rootfs/
 sync
 sudo mkdir -p /media/${USER}/rootfs/boot/extlinux/
