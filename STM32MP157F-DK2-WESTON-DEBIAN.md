@@ -39,6 +39,9 @@ close-animation=none
 focus-animation=none
 binding-modifier=ctrl
 
+[autolaunch]
+#path=/path/to/the/application
+
 [keyboard]
 keymap_layout=us
 
