@@ -181,7 +181,7 @@ WantedBy=multi-user.target
 
 # Start Weston session process (root user)
 ```bash
-sudo XDG_RUNTIME_DIR=/home/debian weston --tty=1
+sudo XDG_RUNTIME_DIR=/run weston --tty=1
 ```
 
 # Weston session as a systemd service (debian user)
