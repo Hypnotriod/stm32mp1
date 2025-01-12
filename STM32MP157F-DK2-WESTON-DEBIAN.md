@@ -6,7 +6,14 @@
 
 # Copy the GPU drivers to the SD card
 ```bash
-sudo cp -r sdk/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* /media/${USER}/rootfs/lib
+export ROOTFS=/media/${USER}/rootfs
+sudo cp -r sdk/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib
+```
+
+# Copy additional resources (optional)
+```bash
+sudo mkdir -p ${ROOTFS}/home/debian/Pictures/
+sudo cp resources/logo/debian-logo-480-800.jpg ${ROOTFS}/home/debian/Pictures/
 ```
 
 # Install Weston on target
@@ -27,10 +34,11 @@ require-input=false
 remoting=remoting-plugin.so
 
 [shell]
-background-color=0xff002244
+#background-image=/home/debian/Pictures/debian-logo-480-800.jpg
+background-color=0xff000000
 background-type=scale-crop
 clock-format=minutes
-panel-color=0xffffd200
+panel-color=0xffaaaaaa
 panel-position=bottom
 locking=false
 animation=none
