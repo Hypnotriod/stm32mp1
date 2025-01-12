@@ -35,8 +35,8 @@ remoting=remoting-plugin.so
 
 [shell]
 #background-image=/home/debian/Pictures/debian-logo-480-800.jpg
+#background-type=scale-crop
 background-color=0xff000000
-background-type=scale-crop
 clock-format=minutes
 panel-color=0xffaaaaaa
 panel-position=bottom
