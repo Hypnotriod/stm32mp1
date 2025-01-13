@@ -1,7 +1,7 @@
 # STM32MP157F-DK2 Weston configuration on Debian
 * [Wayland Weston overview](https://wiki.st.com/stm32mpu/wiki/Wayland_Weston_overview)
 * [Running Weston](https://wayland.pages.freedesktop.org/weston/toc/running-weston.html)
-* [weston.ini](https://manpages.ubuntu.com/manpages/focal/man5/weston.ini.5.html)
+* [weston.ini](https://man.archlinux.org/man/weston.ini.5)
 * [VivanteGPUIP](https://www.verisilicon.com/en/IPPortfolio/VivanteGPUIP)
 
 # Copy the GPU drivers to the SD card
