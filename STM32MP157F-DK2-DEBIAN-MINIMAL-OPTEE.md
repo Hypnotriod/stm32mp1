@@ -181,7 +181,7 @@ sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 o
 sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}3
 sudo dd if=/dev/zero of=${DISK_P}4 bs=512K count=1
 sudo mkfs.ext4 -L rootfs ${DISK_P}5
-# Mount the rootfs partition. The default /media/${USER}/rootfs is used.
+# Mount the rootfs partition. The default /media/${USER}/rootfs path is used.
 export ROOTFS=/media/${USER}/rootfs
 sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C ${ROOTFS}/
 sync
