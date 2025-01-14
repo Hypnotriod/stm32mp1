@@ -5,9 +5,11 @@
 * [weston.ini Arch manual pages](https://man.archlinux.org/man/weston.ini.5)
 * [VivanteGPUIP](https://www.verisilicon.com/en/IPPortfolio/VivanteGPUIP)
 
+NOTE: *This guide is using some of the environment variables declared in the [STM32MP157F-DK2 Debian build on Ubuntu PC](./STM32MP157F-DK2-DEBIAN-MINIMAL-OPTEE.md)*
+
 # Copy the GPU drivers to the SD card
 ```bash
-export ROOTFS=/media/${USER}/rootfs
+cd ${WORKSPACE_DIR}
 sudo cp -r sdk/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib
 ```
 
