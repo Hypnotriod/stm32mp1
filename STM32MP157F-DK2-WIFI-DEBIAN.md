@@ -7,10 +7,10 @@
 auto wlan0
 allow-hotplug wlan0
 iface wlan0 inet manual
-wpa-conf /etc/wpa_supplicant.conf
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
-* Create `/etc/wpa_supplicant.conf`
+* Create `/etc/wpa_supplicant/wpa_supplicant.conf`
 ```txt
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
