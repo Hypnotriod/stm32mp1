@@ -188,9 +188,8 @@ export ROOTFS=/media/${USER}/rootfs
 sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C ${ROOTFS}/
 sync
 sudo mkdir -p ${ROOTFS}/boot/extlinux/
-# Skip the next 3 lines if you do not need the U-Boot splash screen:
+# Skip the next 2 lines if you do not need the U-Boot splash screen:
 sudo cp resources/logo/debian-logo-480-800-16bit.bmp ${ROOTFS}/boot/
-sudo sh -c "echo 'MENU RESOLUTION 480 800' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo 'MENU BACKGROUND /boot/debian-logo-480-800-16bit.bmp' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo 'TIMEOUT 10' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo 'DEFAULT Linux' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
