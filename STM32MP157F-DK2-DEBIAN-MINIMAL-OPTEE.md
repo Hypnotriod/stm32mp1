@@ -188,11 +188,11 @@ sync
 sudo mkdir -p ${ROOTFS}/boot/extlinux/
 # Skip the next 3 lines if you do not need the U-Boot splash screen:
 sudo cp resources/logo/debian-logo-480-800-16bit.bmp ${ROOTFS}/boot/
-sudo sh -c "echo 'MENU RESOLUTION 480 800' > ${ROOTFS}/boot/extlinux/extlinux.conf"
-sudo sh -c "echo 'MENU BACKGROUND /boot/debian-logo-480-800-16bit.bmp' > ${ROOTFS}/boot/extlinux/extlinux.conf"
-sudo sh -c "echo 'TIMEOUT 10' > ${ROOTFS}/boot/extlinux/extlinux.conf"
-sudo sh -c "echo 'DEFAULT Linux' > ${ROOTFS}/boot/extlinux/extlinux.conf"
-sudo sh -c "echo 'LABEL Linux' > ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo 'MENU RESOLUTION 480 800' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo 'MENU BACKGROUND /boot/debian-logo-480-800-16bit.bmp' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo 'TIMEOUT 10' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo 'DEFAULT Linux' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo 'LABEL Linux' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo '    KERNEL /boot/uImage' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=/dev/mmcblk0p5 rw rootfstype=ext4 rootwait' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo '    FDTDIR /boot/dtbs' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
