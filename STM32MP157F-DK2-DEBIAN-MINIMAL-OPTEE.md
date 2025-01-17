@@ -167,6 +167,7 @@ export DISK_P=${DISK}p
 Format the disk and populate with the artifacts:
 ```bash
 cd ${WORKSPACE_DIR}
+export ROOTFS_PARTUUID=e91c4e10-16e6-4c0e-bd0e-77becf4a3582
 sudo sgdisk -o ${DISK}
 sudo sgdisk --resize-table=128 -a 1 \
     -n 1:34:545    -c 1:fsbl1   \
@@ -175,6 +176,7 @@ sudo sgdisk --resize-table=128 -a 1 \
     -n 4:5154:6177 -c 4:u-boot-env \
     -n 5:6178:     -c 5:rootfs  \
     -A 5:set:2                  \
+    -u 5:${ROOTFS_PARTUUID}     \
     -p ${DISK}
 sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 of=${DISK_P}1
 sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 of=${DISK_P}2
@@ -194,7 +196,8 @@ sudo sh -c "echo 'TIMEOUT 10' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo 'DEFAULT Linux' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo 'LABEL Linux' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo '    KERNEL /boot/uImage' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
-sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=/dev/mmcblk0p5 rw rootfstype=ext4 rootwait' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+# sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=/dev/mmcblk0p5 rw rootfstype=ext4 rootwait' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
+sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=PARTUUID=${ROOTFS_PARTUUID} rw rootfstype=ext4 rootwait' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo '    FDTDIR /boot/dtbs' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo cp -rv ./linux/build/install_artifact/boot/* ${ROOTFS}/boot/
 sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
