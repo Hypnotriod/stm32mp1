@@ -6,7 +6,7 @@
 ```txt
 auto wlan0
 allow-hotplug wlan0
-iface wlan0 inet manual
+iface wlan0 inet dhcp
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
@@ -22,24 +22,7 @@ network={
 }
 ```
 
-* Create `/etc/systemd/system/dhclient.service`
-```txt
-[Unit]
-Description= DHCP Client
-Before=network.target
-After=wpa_supplicant.service
-
-[Service]
-Type=forking
-ExecStart=/sbin/dhclient wlan0 -v
-ExecStop=/sbin/dhclient wlan0 -r
-Restart=always
- 
-[Install]
-WantedBy=multi-user.target
-```
-* Enable dhcp client
+* Restart network interface
 ```bash
-sudo systemctl enable dhclient.service
+sudo systemctl restart systemd-networkd
 ```
-
