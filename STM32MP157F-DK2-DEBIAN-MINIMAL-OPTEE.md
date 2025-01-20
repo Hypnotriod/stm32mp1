@@ -1,27 +1,28 @@
 # STM32MP157F-DK2 Debian build on Ubuntu PC
 Based on: [debian-getting-started-with-the-stm32mp157](https://forum.digikey.com/t/debian-getting-started-with-the-stm32mp157/12459)
 
-# Prepare environment inside your working directory
+## Prepare the environment inside your working directory
 ```bash
 export WORKSPACE_DIR=`pwd`
+export SDK_DIR=${WORKSPACE_DIR}/sdk
 export UBOOT_DIR=${WORKSPACE_DIR}/u-boot
 export OPTEE_DIR=${WORKSPACE_DIR}/optee_os
 export MACHINE=stm32mp157f-dk2
 ```
 
-# STM32mpu SDK
+## STM32mpu SDK
 * [STM32MPU Developer Package](https://wiki.st.com/stm32mpu/wiki/STM32MPU_Developer_Package#Installing_the_SDK)
 * [Download the SDK](https://www.st.com/en/embedded-software/stm32mp1dev.html#get-software)
 ```bash
 cd ${WORKSPACE_DIR}
 tar xvf en.SDK-x86_64-stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.tar.gz
 chmod +x stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06/sdk/st-image-weston-openstlinux-weston-stm32mp1.rootfs-x86_64-toolchain-5.0.3-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.sh
-./stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06/sdk/st-image-weston-openstlinux-weston-stm32mp1.rootfs-x86_64-toolchain-5.0.3-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.sh -d ${WORKSPACE_DIR}/sdk
+./stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06/sdk/st-image-weston-openstlinux-weston-stm32mp1.rootfs-x86_64-toolchain-5.0.3-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.sh -d ${SDK_DIR}
 sudo apt install build-essential swig libgnutls28-dev
 sudo apt install libncurses5-dev libncursesw5-dev libyaml-dev u-boot-tools
 ```
 
-# U-boot
+## U-boot
 * [U-Boot for stm32mp1](https://docs.u-boot.org/en/latest/board/st/stm32mp1.html)
 * [STM32MP15 U-Boot](https://wiki.stmicroelectronics.cn/stm32mpu/wiki/STM32MP25_U-Boot)
 * [STM32MP15 U-Boot build](https://wiki.st.com/stm32mpu/wiki/U-Boot_overview#U-Boot_build)
@@ -29,7 +30,7 @@ sudo apt install libncurses5-dev libncursesw5-dev libyaml-dev u-boot-tools
 cd ${WORKSPACE_DIR}
 git clone -b v2023.10-stm32mp https://github.com/STMicroelectronics/u-boot --depth=1
 cd u-boot/
-source ${WORKSPACE_DIR}/sdk/environment-setup
+source ${SDK_DIR}/environment-setup
 export KBUILD_OUTPUT=${UBOOT_DIR}/out
 make distclean
 make stm32mp15_defconfig
@@ -39,14 +40,14 @@ Artifacts:
 * u-boot/out/u-boot.bin
 * u-boot/out/u-boot-nodtb.bin
 
-# OP-TEE
+## OP-TEE
 * [How to build OP-TEE components](https://wiki.st.com/stm32mpu/wiki/How_to_build_OP-TEE_components)
 ```bash
 cd ${WORKSPACE_DIR}
 # git clone -b 4.0.0-stm32mp https://github.com/STMicroelectronics/optee_os.git --depth=1
 git clone -b 3.19.0-stm32mp-r2.1 https://github.com/STMicroelectronics/optee_os.git --depth=1
 cd optee_os/
-source ${WORKSPACE_DIR}/sdk/environment-setup
+source ${SDK_DIR}/environment-setup
 unset LDFLAGS;
 unset CFLAGS;
 make PLATFORM=stm32mp1 CFG_EMBED_DTB_SOURCE_FILE=${MACHINE}.dts CFG_TEE_CORE_LOG_LEVEL=2 O=build all
@@ -56,7 +57,7 @@ Artifacts:
 * optee_os/build/core/tee-pageable_v2.bin
 * optee_os/build/core/tee-pager_v2.bin
 
-# Arm trusted firmware
+## Arm trusted firmware
 * [Trusted Firmware build instructions](https://trustedfirmware-a.readthedocs.io/en/lts-v2.10/plat/st/stm32mp1.html#build-instructions)
 * [Trusted Firmware doc](https://trustedfirmware-a.readthedocs.io/en/stable/plat/st/stm32mp1.html)
 * `-pedantic` flag in `HOSTCCFLAGS` of `arm-trusted-firmware/tools/fiptool/Makefile` may cause the `ISO C does not support the '_FloatXX' type` errors during the build. Can be removed.
@@ -64,7 +65,7 @@ Artifacts:
 cd ${WORKSPACE_DIR}
 git clone -b v2.10-stm32mp https://github.com/STMicroelectronics/arm-trusted-firmware.git --depth=1
 cd arm-trusted-firmware/
-source ${WORKSPACE_DIR}/sdk/environment-setup
+source ${SDK_DIR}/environment-setup
 unset LDFLAGS;
 unset CFLAGS;
 make realclean
@@ -98,7 +99,7 @@ Artifacts:
 * arm-trusted-firmware/build/stm32mp1/release/fip.bin
 * arm-trusted-firmware/build/stm32mp1/release/tf-a-stm32mp157f-dk2.stm32
 
-# Linux kernel
+## Linux kernel
 * [Modify, rebuild and reload the Linux kernel](https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP2_boards/STM32MP257x-DK/Develop_on_Arm_Cortex-A35/Modify,_rebuild_and_reload_the_Linux_kernel)
 ```bash
 cd ${WORKSPACE_DIR}
@@ -106,7 +107,7 @@ git clone -b v6.6-stm32mp https://github.com/STMicroelectronics/linux.git --dept
 cd linux
 export OUTPUT_BUILD_DIR=$PWD/build
 mkdir -p ${OUTPUT_BUILD_DIR}
-source ${WORKSPACE_DIR}/sdk/environment-setup
+source ${SDK_DIR}/environment-setup
 make O="${OUTPUT_BUILD_DIR}" defconfig fragment*.config
 cd ${OUTPUT_BUILD_DIR}
 ```
@@ -127,14 +128,14 @@ Artifacts:
 * linux/build/install_artifact/boot/dtbs/stm32mp157f-dk2.dtb
 * linux/build/install_artifact/lib/modules/6.6.48/
 
-# Debian rootfs
+## Debian rootfs
 ```bash
 cd ${WORKSPACE_DIR}
 wget -c https://rcn-ee.com/rootfs/eewiki/minfs/debian-12.1-minimal-armhf-2023-08-22.tar.xz
 tar xf debian-12.1-minimal-armhf-2023-08-22.tar.xz 
 ```
 
-# Populate the SD card
+## Populate the SD card
 * [Flash Layout SD card](https://wiki.st.com/stm32mpu/wiki/STM32CubeProgrammer_flashlayout#SD_card)
 * [STM32 MPU Flash mapping](https://wiki.st.com/stm32mpu/wiki/STM32_MPU_Flash_mapping)
 * [extlinux.conf Menu Customization](https://www.willhaley.com/blog/extlinux-menu/)
@@ -202,7 +203,7 @@ sudo cp -rv ./linux/build/install_artifact/boot/* ${ROOTFS}/boot/
 sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
 sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-ro  0  1' >> ${ROOTFS}/etc/fstab"
 # Configure the Broadcom/Cypress 802.11 wireless card
-sudo cp sdk/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/brcm/brcmfmac43430-sdio.st,${MACHINE}.txt ${ROOTFS}/usr/lib/firmware/brcm/
+sudo cp ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/brcm/brcmfmac43430-sdio.st,${MACHINE}.txt ${ROOTFS}/usr/lib/firmware/brcm/
 sudo sudo ln ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.st,${MACHINE}.bin
 sync
 ```
