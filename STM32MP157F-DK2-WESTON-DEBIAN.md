@@ -7,19 +7,19 @@
 
 NOTE: *This guide is using some of the environment variables declared in the [STM32MP157F-DK2 Debian build on Ubuntu PC](./STM32MP157F-DK2-DEBIAN-MINIMAL-OPTEE.md)*
 
-# Copy the GPU drivers to the SD card
+## Copy the GPU drivers to the SD card
 ```bash
-cd ${WORKSPACE_DIR}
-sudo cp -r sdk/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib
+sudo cp -r ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib
 ```
 
-# Copy additional resources (optional)
+## Copy additional resources (optional)
 ```bash
+cd ${WORKSPACE_DIR}
 sudo mkdir -p ${ROOTFS}/home/debian/Pictures/
 sudo cp resources/logo/debian-logo-480-800.jpg ${ROOTFS}/home/debian/Pictures/
 ```
 
-# Install Weston on target
+## Install Weston on target
 ```bash
 sudo apt update
 sudo apt install weston
@@ -194,12 +194,12 @@ Alias=display-manager.service
 WantedBy=multi-user.target
 ```
 
-# Start Weston session process (root user)
+## Start Weston session process (root user)
 ```bash
 sudo XDG_RUNTIME_DIR=/run weston --tty=1
 ```
 
-# Weston session as a systemd service (debian user)
+## Weston session as a systemd service (debian user)
 ```bash
 # Start/Stop
 sudo systemctl start weston-graphical-session.service
