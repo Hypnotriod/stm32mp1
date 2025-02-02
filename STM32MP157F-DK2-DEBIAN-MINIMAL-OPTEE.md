@@ -211,7 +211,7 @@ sync
 ```
 
 ## Issues
-* [`systemd-binfmt` fails on boot if binfmt is missing from fstab](https://github.com/systemd/systemd/issues/28501)  
+* [systemd-binfmt fails on boot if binfmt is missing from fstab](https://github.com/systemd/systemd/issues/28501)  
 Replace `ConditionPathIsReadWrite=/proc/sys/` with `ConditionPathIsMountPoint=/proc/sys/fs/binfmt_misc` in `/usr/lib/systemd/system/systemd-binfmt.service`
 ```txt
 #ConditionPathIsReadWrite=/proc/sys/
