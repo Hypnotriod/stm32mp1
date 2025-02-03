@@ -204,7 +204,7 @@ sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
 sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-ro  0  1' >> ${ROOTFS}/etc/fstab"
 # Configure the Broadcom/Cypress 802.11 wireless card
 sudo cp ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/brcm/brcmfmac43430-sdio.st,${MACHINE}.txt ${ROOTFS}/usr/lib/firmware/brcm/
-sudo sudo ln ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.st,${MACHINE}.bin
+sudo ln -s ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.st,${MACHINE}.bin
 # Copy the GPU drivers
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib/
 sync
