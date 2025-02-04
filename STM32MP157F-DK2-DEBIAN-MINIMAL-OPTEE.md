@@ -57,7 +57,7 @@ Artifacts:
 * optee_os/build/core/tee-pageable_v2.bin
 * optee_os/build/core/tee-pager_v2.bin
 
-## Arm Trusted Firmware-A / Firmware Image Package (FIP)
+## Arm Trusted Firmware-A (TF-A) / Firmware Image Package (FIP)
 * [Trusted Firmware build instructions](https://trustedfirmware-a.readthedocs.io/en/lts-v2.10/plat/st/stm32mp1.html#build-instructions)
 * [Trusted Firmware doc](https://trustedfirmware-a.readthedocs.io/en/stable/plat/st/stm32mp1.html)
 * `-pedantic` flag in `HOSTCCFLAGS` of `arm-trusted-firmware/tools/fiptool/Makefile` may cause the `ISO C does not support the '_FloatXX' type` errors during the build. Can be removed.
