@@ -157,12 +157,12 @@ Also unmount all the previous SD card partitions and erase the partition table:
 umount ${DISK_P}X
 sudo dd if=/dev/zero of=${DISK} bs=1M count=10
 ```
-Alternatively to make the 4GB image file using the loop device do:
+Alternatively to make an image file (4GB example) using the `loop device` do:
 ```bash
 cd ${WORKSPACE_DIR}
 export IMAGE_FILE=${MACHINE}-sdcard.img
 dd if=/dev/zero of=${IMAGE_FILE} bs=1G count=4
-DISK=$(sudo losetup --partscan --show --find ${IMAGE_FILE})
+export DISK=$(sudo losetup --partscan --show --find ${IMAGE_FILE})
 export DISK_P=${DISK}p
 ```
 Format the disk and populate with the artifacts:
@@ -208,6 +208,9 @@ sudo ln -s ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/
 # Copy the GPU drivers
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib/
 sync
+# Unmount the rootfs partition and detach loop device (if used)
+sudo umount ${DISK_P}5
+sudo losetup -d ${DISK}
 ```
 
 ## Issues
