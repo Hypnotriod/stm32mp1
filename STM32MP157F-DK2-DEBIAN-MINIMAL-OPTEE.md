@@ -208,7 +208,9 @@ sudo ln -s ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/
 # Copy the GPU drivers
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib/
 sync
-# Unmount the rootfs partition and detach loop device (if used)
+```
+Unmount the rootfs partition and detach loop device (if used)
+```bash
 sudo umount ${DISK_P}5
 sudo losetup -d ${DISK}
 ```
