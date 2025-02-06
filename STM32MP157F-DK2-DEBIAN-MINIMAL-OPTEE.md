@@ -204,7 +204,7 @@ sudo cp -rv ./linux/build/install_artifact/boot/* ${ROOTFS}/boot/
 sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
 sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-ro  0  1' >> ${ROOTFS}/etc/fstab"
 sudo mkdir -p ${ROOTFS}/boot/firmware/
-wget -O ${ROOTFS}/boot/firmware/sysconf.txt https://openbeagle.org/beagleboard/bbbio-set-sysconf/-/raw/main/src/sysconf.txt
+sudo wget -O ${ROOTFS}/boot/firmware/sysconf.txt https://openbeagle.org/beagleboard/bbbio-set-sysconf/-/raw/main/src/sysconf.txt
 # Copy/replace the Broadcom/Cypress 802.11 wireless card firmware
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/* ${ROOTFS}/usr/lib/firmware/
 # Copy the GPU drivers
