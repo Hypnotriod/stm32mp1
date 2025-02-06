@@ -7,12 +7,13 @@
 * Update `/etc/network/interfaces` with:
 ```txt
 auto wlan0
-allow-hotplug wlan0
+#allow-hotplug wlan0
 iface wlan0 inet dhcp
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
-* Create `/etc/wpa_supplicant/wpa_supplicant.conf`
+* Create `/etc/wpa_supplicant/wpa_supplicant.conf`  
+Use `wpa_passphrase your_ssid your_password | grep -vE "#psk"` to generate WPA PSK from an ASCII passphrase
 ```txt
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
@@ -26,5 +27,7 @@ network={
 
 * Restart network interface
 ```bash
-sudo systemctl restart systemd-networkd
+sudo systemctl restart systemd-networkd.service
+# or with networking services
+sudo systemctl restart networking.service
 ```

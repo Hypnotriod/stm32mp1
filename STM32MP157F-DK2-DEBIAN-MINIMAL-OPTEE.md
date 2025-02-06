@@ -131,8 +131,9 @@ Artifacts:
 ## Debian rootfs
 ```bash
 cd ${WORKSPACE_DIR}
-wget -c https://rcn-ee.com/rootfs/eewiki/minfs/debian-12.1-minimal-armhf-2023-08-22.tar.xz
-tar xf debian-12.1-minimal-armhf-2023-08-22.tar.xz 
+wget -c https://rcn-ee.com/rootfs/eewiki/minfs/debian-12.9-minimal-armhf-2025-02-05.tar.xz
+tar xf debian-12.9-minimal-armhf-2025-02-05.tar.xz
+export ROOTFS_TAR=${WORKSPACE_DIR}/debian-12.9-minimal-armhf-2025-02-05/armhf-rootfs-debian-bookworm.tar
 ```
 
 ## Populate the SD card
@@ -186,7 +187,7 @@ sudo dd if=/dev/zero of=${DISK_P}4 bs=512K count=1
 sudo mkfs.ext4 -L rootfs ${DISK_P}5
 # Mount the rootfs partition. The default /media/${USER}/rootfs path is used.
 export ROOTFS=/media/${USER}/rootfs
-sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C ${ROOTFS}/
+sudo tar xpvf ${ROOTFS_TAR} -C ${ROOTFS}/
 sync
 sudo mkdir -p ${ROOTFS}/boot/extlinux/
 # Skip the next 2 lines if you do not need the U-Boot splash screen:
@@ -202,12 +203,60 @@ sudo sh -c "echo '    FDTDIR /boot/dtbs' >> ${ROOTFS}/boot/extlinux/extlinux.con
 sudo cp -rv ./linux/build/install_artifact/boot/* ${ROOTFS}/boot/
 sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
 sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-ro  0  1' >> ${ROOTFS}/etc/fstab"
-# Configure the Broadcom/Cypress 802.11 wireless card
-sudo cp ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/brcm/brcmfmac43430-sdio.st,${MACHINE}.txt ${ROOTFS}/usr/lib/firmware/brcm/
-sudo ln -s ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.st,${MACHINE}.bin
+sudo mkdir -p ${ROOTFS}/boot/firmware/
+sudo touch ${ROOTFS}/boot/firmware/sysconf.txt
+# Copy/replace the Broadcom/Cypress 802.11 wireless card firmware
+sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/* ${ROOTFS}/usr/lib/firmware/
 # Copy the GPU drivers
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib/
 sync
+```
+To setup your essential system configuration on system boot using `bbbio-set-sysconf.service` update the `${ROOTFS}/boot/firmware/sysconf.txt` file with:
+```txt
+# root_password - Set a password for the root user (not used in ubuntu)
+#root_password=
+
+# root_authorized_key - Set an authorized key for a root ssh login (not used in ubuntu)
+#root_authorized_key=
+
+# user_name - Set a user name for the user (1000)
+#user_name=
+
+# user_password - Set a password for user (1000)
+#user_password=
+
+# user_authorized_key - Set an authorized key for a user (1000) ssh login
+#user_authorized_key=
+
+# iwd_psk_file - Set a configuration for iwd https://wiki.archlinux.org/title/iwd
+#iwd_psk_file=
+
+# wifi_regdom - Country Code (ISO Alpha-2) Requests the country be set for the system.
+#wifi_regdom=US
+
+# hostapd_file - Set a configuration for hostapd https://wiki.gentoo.org/wiki/Hostapd
+#hostapd_file=SoftAp0.conf
+
+# hostname - Set the system hostname.
+#hostname=
+
+# keymap - Set the system keymap.
+#keymap=us
+
+# timezone - Set the system timezone.
+#timezone=America/Chicago
+
+# enable_ufw - enable ufw firewall (https://en.wikipedia.org/wiki/Uncomplicated_Firewall)
+#enable_ufw=yes
+
+# ufw_allow_ssh - allow ssh access over port 22
+#ufw_allow_ssh=yes
+
+# ufw_allow_http - allow http access over port 80
+#ufw_allow_http=yes
+
+# ufw_allow_https - allow https access over port 443
+#ufw_allow_https=yes
 ```
 Unmount the rootfs partition and detach loop device (if used)
 ```bash
