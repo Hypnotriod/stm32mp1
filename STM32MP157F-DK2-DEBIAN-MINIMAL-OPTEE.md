@@ -211,7 +211,7 @@ sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/l
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib/
 sync
 ```
-Update the `${ROOTFS}/boot/firmware/sysconf.txt` file to setup essential system configuration, such as `user name`, `user password`, `hostname`, etc, at system boot using the `bbbio-set-sysconf.service`.  
+Edit the `${ROOTFS}/boot/firmware/sysconf.txt` file to setup essential system configurations, such as `user name`, `user password`, `hostname`, etc, at the system boot using the `bbbio-set-sysconf.service`.  
 Unmount the rootfs partition and detach loop device (if used)
 ```bash
 sudo umount ${DISK_P}5
