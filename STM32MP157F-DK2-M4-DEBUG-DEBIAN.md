@@ -1,4 +1,4 @@
-# STM32MP157F-DK2 M4 core debug in Production Mode from STM32CubeIDE on Debian 
+# STM32MP157F-DK2 M4 core debug in Production Mode with STM32CubeIDE on Debian 
 * [Linux remoteproc framework overview](https://wiki.st.com/stm32mpu/wiki/Linux_remoteproc_framework_overview)
 * [Remote debugging using gdbserver](https://wiki.st.com/stm32mpu/wiki/GDB#Remote_debugging_using_gdbserver)
 * [Modify, rebuild and reload a firmware](https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP1_boards/STM32MP157x-DK2/Develop_on_Arm%C2%AE_Cortex%C2%AE-M4/Modify,_rebuild_and_reload_a_firmware)
