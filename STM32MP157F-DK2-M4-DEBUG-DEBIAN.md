@@ -10,11 +10,6 @@
 ```bash
 sudo apt install gdbserver
 ```
-* Install the `dropbear` (optionally)
-```bash
-sudo apt install dropbear
-sudo systemctl disable ssh.service
-```
 * Set a password for the `root` user and update the `/etc/ssh/sshd_config` with:
 ```txt
 PermitRootLogin yes
