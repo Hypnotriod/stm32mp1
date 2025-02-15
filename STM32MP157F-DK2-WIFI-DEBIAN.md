@@ -7,7 +7,6 @@
 * Update `/etc/network/interfaces` with:
 ```txt
 auto wlan0
-#allow-hotplug wlan0
 iface wlan0 inet dhcp
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 ```
