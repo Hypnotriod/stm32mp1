@@ -22,7 +22,7 @@ sudo apt install build-essential swig libgnutls28-dev
 sudo apt install libncurses5-dev libncursesw5-dev libyaml-dev u-boot-tools
 ```
 
-## U-boot
+## U-boot (Universal Bootloader)
 * [U-Boot for stm32mp1](https://docs.u-boot.org/en/latest/board/st/stm32mp1.html)
 * [STM32MP15 U-Boot](https://wiki.stmicroelectronics.cn/stm32mpu/wiki/STM32MP25_U-Boot)
 * [STM32MP15 U-Boot build](https://wiki.st.com/stm32mpu/wiki/U-Boot_overview#U-Boot_build)
@@ -40,7 +40,7 @@ Artifacts:
 * u-boot/out/u-boot.bin
 * u-boot/out/u-boot-nodtb.bin
 
-## OP-TEE
+## OP-TEE (Open Portable Trusted Execution Environment)
 * [How to build OP-TEE components](https://wiki.st.com/stm32mpu/wiki/How_to_build_OP-TEE_components)
 ```bash
 cd ${WORKSPACE_DIR}
@@ -57,7 +57,7 @@ Artifacts:
 * optee_os/build/core/tee-pageable_v2.bin
 * optee_os/build/core/tee-pager_v2.bin
 
-## Arm Trusted Firmware-A (TF-A) / Firmware Image Package (FIP)
+## TF-A (Arm Trusted Firmware-A) / FIP (Firmware Image Package)
 * [Trusted Firmware build instructions](https://trustedfirmware-a.readthedocs.io/en/lts-v2.10/plat/st/stm32mp1.html#build-instructions)
 * [Trusted Firmware doc](https://trustedfirmware-a.readthedocs.io/en/stable/plat/st/stm32mp1.html)
 * `-pedantic` flag in `HOSTCCFLAGS` of `arm-trusted-firmware/tools/fiptool/Makefile` may cause the `ISO C does not support the '_FloatXX' type` errors during the build. Can be removed.
