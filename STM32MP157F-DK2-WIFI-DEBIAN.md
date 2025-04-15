@@ -30,3 +30,4 @@ sudo systemctl restart systemd-networkd.service
 # or with networking services
 sudo systemctl restart networking.service
 ```
+
