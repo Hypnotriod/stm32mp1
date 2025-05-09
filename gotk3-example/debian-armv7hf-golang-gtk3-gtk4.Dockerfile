@@ -1,4 +1,4 @@
-FROM balenalib/armv7hf-debian-golang:latest
+FROM arm32v7/golang:1.24.3-bookworm
 WORKDIR /workspace
 
 RUN apt update 
