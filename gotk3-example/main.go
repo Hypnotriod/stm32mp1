@@ -1,10 +1,14 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 
 	"github.com/gotk3/gotk3/gtk"
 )
+
+//go:embed style.css
+var styleCss string
 
 func main() {
 	gtk.Init(nil)
@@ -26,7 +30,11 @@ func main() {
 
 	window.Add(buttonBox)
 	window.SetDefaultSize(300, 200)
-	window.ShowAll()
 
+	cssProvider, _ := gtk.CssProviderNew()
+	cssProvider.LoadFromData(styleCss)
+	gtk.AddProviderForScreen(window.GetScreen(), cssProvider, gtk.STYLE_PROVIDER_PRIORITY_USER)
+
+	window.ShowAll()
 	gtk.Main()
 }

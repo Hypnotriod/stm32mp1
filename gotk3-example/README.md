@@ -1,6 +1,7 @@
 # gotk3-example
 * [Create a simple hello-world application](https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP1_boards/STM32MP135x-DK/Develop_on_Arm%C2%AE_Cortex%C2%AE-A7/Create_a_simple_hello-world_application)
 * [gotk3](https://github.com/gotk3/gotk3)
+* [GTK CSS properties](https://docs.gtk.org/gtk3/css-properties.html)
 
 Go `GTK3` build for stm32mp1 `armv7hf` in `Docker` container example.
 

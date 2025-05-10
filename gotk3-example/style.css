@@ -1,0 +1,30 @@
+headerbar {
+    background-image: none;
+    background-color: #2c2c2c;
+    border: 1px solid #222222;
+    border-radius: 5px 5px 0 0;
+    color: #fefaf9;
+    box-shadow: none;
+}
+
+button {
+    background-image: none;
+    background-color: #484848;
+    color: #f7f7f7;
+    text-shadow: #111111;
+    border: 1px solid #222222;
+    box-shadow: none;
+    -gtk-icon-shadow: none;
+}
+
+window {
+    background-color: #3e3e3e;
+    box-shadow: none;
+}
+
+button.titlebutton.close {
+    background-color: #2c2c2c;
+    background-image: radial-gradient(#df4a16 55%, #2c2c2c 5%);
+    border: none;
+    color: #fefaf9;
+}
