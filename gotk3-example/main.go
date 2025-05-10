@@ -18,6 +18,10 @@ func main() {
 		gtk.MainQuit()
 	})
 
+	cssProvider, _ := gtk.CssProviderNew()
+	cssProvider.LoadFromData(styleCss)
+	gtk.AddProviderForScreen(window.GetScreen(), cssProvider, gtk.STYLE_PROVIDER_PRIORITY_USER)
+
 	buttonBox, _ := gtk.ButtonBoxNew(gtk.ORIENTATION_HORIZONTAL)
 
 	button, _ := gtk.ButtonNewWithLabel("Hello, gotk3!")
@@ -30,11 +34,7 @@ func main() {
 
 	window.Add(buttonBox)
 	window.SetDefaultSize(300, 200)
-
-	cssProvider, _ := gtk.CssProviderNew()
-	cssProvider.LoadFromData(styleCss)
-	gtk.AddProviderForScreen(window.GetScreen(), cssProvider, gtk.STYLE_PROVIDER_PRIORITY_USER)
-
 	window.ShowAll()
+
 	gtk.Main()
 }
