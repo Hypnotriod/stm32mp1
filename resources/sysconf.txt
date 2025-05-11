@@ -21,16 +21,16 @@
 # uncommented.
 
 # root_password - Set a password for the root user (not used in ubuntu)
-#root_password=FooBar
+#root_password=
 
 # root_authorized_key - Set an authorized key for a root ssh login (not used in ubuntu)
 #root_authorized_key=
 
 # user_name - Set a user name for the user (1000)
-#user_name=beagle
+user_name=debian
 
 # user_password - Set a password for user (1000)
-#user_password=FooBar
+user_password=debian
 
 # user_authorized_key - Set an authorized key for a user (1000) ssh login
 #user_authorized_key=
@@ -45,19 +45,19 @@
 #hostapd_file=SoftAp0.conf
 
 # hostname - Set the system hostname.
-#hostname=BeagleBone
+hostname=stm32mp157f-dk2
 
 # keymap - Set the system keymap.
 #keymap=us
 
 # timezone - Set the system timezone.
-#timezone=America/Chicago
+timezone=Etc/GMT+0
 
 # enable_ufw - enable ufw firewall (https://en.wikipedia.org/wiki/Uncomplicated_Firewall)
 #enable_ufw=yes
 
 # ufw_allow_ssh - allow ssh access over port 22
-#ufw_allow_ssh=yes
+ufw_allow_ssh=yes
 
 # ufw_allow_http - allow http access over port 80
 #ufw_allow_http=yes
