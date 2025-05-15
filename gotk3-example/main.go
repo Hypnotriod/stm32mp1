@@ -3,6 +3,7 @@ package main
 import (
 	_ "embed"
 	"fmt"
+	"os"
 
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -11,7 +12,7 @@ import (
 var styleCss string
 
 func main() {
-	gtk.Init(nil)
+	gtk.Init(&os.Args)
 	window, _ := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
 	window.SetTitle("Gotk3 Example")
 	window.Connect("destroy", func() {
