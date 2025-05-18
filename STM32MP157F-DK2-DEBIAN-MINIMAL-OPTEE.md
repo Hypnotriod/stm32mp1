@@ -219,6 +219,30 @@ sudo umount ${DISK_P}5
 sudo losetup -d ${DISK}
 ```
 
+## In case of an image file, after it was flashed to a microSD card
+Use the following code snippet to grow the `rootfs` partition to the full microSD card capacity:  
+Call `lsblk` to determine the device entry for the SD card.  
+In case of `/dev/sdX` do:
+```bash
+export DISK=/dev/sdX
+export DISK_P=${DISK}
+```
+In case of `/dev/mmcblkX` do:
+```bash
+export DISK=/dev/mmcblkX
+export DISK_P=${DISK}p
+```
+```bash
+# Unmount the rootfs partition 5 of the SD card
+sudo umount ${DISK_P}5
+# Resize the rootfs partition 5 to the full capacity
+sudo parted ${DISK} resizepart 5 -- -1
+# Check the rootfs ext4 partition for bad blocks
+sudo e2fsck -f ${DISK_P}5
+# Resize the rootfs partition 5 file system
+sudo resize2fs ${DISK_P}5
+```
+
 ## Issues
 * [systemd-binfmt fails on boot if binfmt is missing from fstab](https://github.com/systemd/systemd/issues/28501)  
 Replace `ConditionPathIsReadWrite=/proc/sys/` with `ConditionPathIsMountPoint=/proc/sys/fs/binfmt_misc` in `/usr/lib/systemd/system/systemd-binfmt.service`
