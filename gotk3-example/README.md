@@ -12,7 +12,7 @@ make build-gotk3-example
 ```
 
 ## Build for the target platform inside the Docker container
-* Initial build:
+* Initial build (will take about an hour):
 ```bash
 make build-armv7hf-docker-container
 # Windows:
