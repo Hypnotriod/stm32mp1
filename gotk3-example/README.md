@@ -11,7 +11,7 @@ apt install -y build-essential libgtk-3-dev libgtk-4-dev libgirepository1.0-dev
 make build-gotk3-example
 ```
 
-## Build for target in Docker container
+## Build for the target platform inside the Docker container
 * Initial build:
 ```bash
 make build-armv7hf-docker-container
