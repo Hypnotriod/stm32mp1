@@ -11,12 +11,12 @@ apt install -y build-essential libgtk-3-dev libgtk-4-dev libgirepository1.0-dev
 make build-gotk3-example
 ```
 
-## Build for target in the Docker container
+## Build for the target platform inside the Docker container
 * Build the Docker image:
 ```bash
 make build-armv7hf-docker-image
 ```
-* Build the gotk3 example (the first build can take an hour):
+* Build the gotk3 example (the initial build can take about an hour):
 ```bash
 make build-armv7hf-gotk3-example
 # Windows:

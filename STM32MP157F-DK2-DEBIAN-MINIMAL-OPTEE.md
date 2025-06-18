@@ -11,10 +11,11 @@ export MACHINE=stm32mp157f-dk2
 ```
 
 ## STM32mpu SDK
-* [STM32MPU Developer Package](https://wiki.st.com/stm32mpu/wiki/STM32MPU_Developer_Package#Installing_the_SDK)
-* [Download the SDK](https://www.st.com/en/embedded-software/stm32mp1dev.html#get-software)
+* [STM32MPU Developer Package](https://wiki.st.com/stm32mpu/wiki/STM32MPU_Developer_Package#Installing_the_SDK)  
+
+Download the [STM32MP1 OpenSTLinux Developer Package](https://www.st.com/en/embedded-software/stm32mp1dev.html#get-software) .tar archive.  
+Extract and install the SDK:   
 ```bash
-cd ${WORKSPACE_DIR}
 tar xvf en.SDK-x86_64-stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.tar.gz
 chmod +x stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06/sdk/st-image-weston-openstlinux-weston-stm32mp1.rootfs-x86_64-toolchain-5.0.3-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.sh
 ./stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06/sdk/st-image-weston-openstlinux-weston-stm32mp1.rootfs-x86_64-toolchain-5.0.3-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.sh -d ${SDK_DIR}
@@ -216,6 +217,30 @@ Unmount the rootfs partition and detach loop device (if used)
 ```bash
 sudo umount ${DISK_P}5
 sudo losetup -d ${DISK}
+```
+
+## In case of an image file, after it was flashed to a microSD card
+Use the following code snippet to grow the `rootfs` partition to the full microSD card capacity:  
+Call `lsblk` to determine the device entry for the SD card.  
+In case of `/dev/sdX` do:
+```bash
+export DISK=/dev/sdX
+export DISK_P=${DISK}
+```
+In case of `/dev/mmcblkX` do:
+```bash
+export DISK=/dev/mmcblkX
+export DISK_P=${DISK}p
+```
+```bash
+# Unmount the rootfs partition 5 of the SD card
+sudo umount ${DISK_P}5
+# Resize the rootfs partition 5 to the full capacity
+sudo parted ${DISK} resizepart 5 -- -1
+# Check the rootfs ext4 partition for bad blocks
+sudo e2fsck -f ${DISK_P}5
+# Resize the rootfs partition 5 file system
+sudo resize2fs ${DISK_P}5
 ```
 
 ## Issues
