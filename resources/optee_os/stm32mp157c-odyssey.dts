@@ -10,10 +10,10 @@
 
 / {
 	model = "Seeed Studio Odyssey STM32MP157C Board";
-	compatible = "seeed,stm32mp157c-odyssey", "st,stm32mp157";
+	compatible = "seeed,stm32mp157c-odyssey", "seeed,stm32mp157c-odyssey-som", "st,stm32mp157";
 
 	aliases {
-		serial3 = &usart2;
+		serial0 = &uart4;
 	};
 
 	chosen {
