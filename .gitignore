@@ -1,1 +1,6 @@
 gotk3-example/bin
+sdk/
+u-boot/
+optee_os/
+linux/
+debian*/
