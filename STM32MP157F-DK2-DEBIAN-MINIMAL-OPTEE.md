@@ -13,7 +13,7 @@ export MACHINE=stm32mp157f-dk2
 ## STM32mpu SDK
 * [STM32MPU Developer Package](https://wiki.st.com/stm32mpu/wiki/STM32MPU_Developer_Package#Installing_the_SDK)  
 
-Download the [STM32MP1 OpenSTLinux Developer Package](https://www.st.com/en/embedded-software/stm32mp1dev.html#get-software) .tar archive.  
+Download the latest [STM32MP1 OpenSTLinux Developer Package](https://www.st.com/en/embedded-software/stm32mp1dev.html#get-software) .tar archive.  
 Extract and install the SDK:   
 ```bash
 tar xvf en.SDK-x86_64-stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.tar.gz
@@ -29,7 +29,7 @@ sudo apt install libncurses5-dev libncursesw5-dev libyaml-dev u-boot-tools
 * [STM32MP15 U-Boot build](https://wiki.st.com/stm32mpu/wiki/U-Boot_overview#U-Boot_build)
 ```bash
 cd ${WORKSPACE_DIR}
-git clone -b v2023.10-stm32mp https://github.com/STMicroelectronics/u-boot --depth=1
+git clone -b v2023.10-stm32mp-r1.2 https://github.com/STMicroelectronics/u-boot --depth=1
 cd u-boot/
 source ${SDK_DIR}/environment-setup
 export KBUILD_OUTPUT=${UBOOT_DIR}/out
@@ -45,13 +45,14 @@ Artifacts:
 * [How to build OP-TEE components](https://wiki.st.com/stm32mpu/wiki/How_to_build_OP-TEE_components)
 ```bash
 cd ${WORKSPACE_DIR}
-# git clone -b 4.0.0-stm32mp https://github.com/STMicroelectronics/optee_os.git --depth=1
-git clone -b 3.19.0-stm32mp-r2.1 https://github.com/STMicroelectronics/optee_os.git --depth=1
+git clone -b 4.0.0-stm32mp-r1.2 https://github.com/STMicroelectronics/optee_os.git --depth=1
 cd optee_os/
 source ${SDK_DIR}/environment-setup
 unset LDFLAGS;
 unset CFLAGS;
-make PLATFORM=stm32mp1 CFG_EMBED_DTB_SOURCE_FILE=${MACHINE}.dts CFG_TEE_CORE_LOG_LEVEL=2 O=build all
+make PLATFORM=stm32mp1 CFG_EMBED_DTB_SOURCE_FILE=${MACHINE}.dts \
+    CFLAGS32=--sysroot=${SDKTARGETSYSROOT} \
+    CFG_TEE_CORE_LOG_LEVEL=2 O=build all
 ```
 Artifacts:
 * optee_os/build/core/tee-header_v2.bin
@@ -64,7 +65,7 @@ Artifacts:
 * `-pedantic` flag in `HOSTCCFLAGS` of `arm-trusted-firmware/tools/fiptool/Makefile` may cause the `ISO C does not support the '_FloatXX' type` errors during the build. Can be removed.
 ```bash
 cd ${WORKSPACE_DIR}
-git clone -b v2.10-stm32mp https://github.com/STMicroelectronics/arm-trusted-firmware.git --depth=1
+git clone -b v2.10-stm32mp-r1.2 https://github.com/STMicroelectronics/arm-trusted-firmware.git --depth=1
 cd arm-trusted-firmware/
 source ${SDK_DIR}/environment-setup
 unset LDFLAGS;
@@ -86,7 +87,7 @@ make PLAT=stm32mp1 \
     BL32_EXTRA2=${OPTEE_DIR}/build/core/tee-pageable_v2.bin \
     all fip
 ```
-Create fip with fiptool (alternative way). Skip this part.
+Create fip with fiptool (alternative way, skip this part).
 ```bash
 fiptool create \
     --tos-fw ${OPTEE_DIR}/build/core/tee-header_v2.bin \
@@ -104,17 +105,14 @@ Artifacts:
 * [Modify, rebuild and reload the Linux kernel](https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP2_boards/STM32MP257x-DK/Develop_on_Arm_Cortex-A35/Modify,_rebuild_and_reload_the_Linux_kernel)
 ```bash
 cd ${WORKSPACE_DIR}
-git clone -b v6.6-stm32mp https://github.com/STMicroelectronics/linux.git --depth=1
+git clone -b v6.6-stm32mp-r1.2 https://github.com/STMicroelectronics/linux.git --depth=1
 cd linux
 export OUTPUT_BUILD_DIR=$PWD/build
 mkdir -p ${OUTPUT_BUILD_DIR}
 source ${SDK_DIR}/environment-setup
 make O="${OUTPUT_BUILD_DIR}" defconfig fragment*.config
 cd ${OUTPUT_BUILD_DIR}
-```
-Set `CONFIG_LOCALVERSION_AUTO` to `n` in `linux/build/.config` to remove the version suffix.  
-Also launching `make` with the `LOCALVERSION=` helps to get rid of the `+` sign.
-```bash
+sed -i 's/CONFIG_LOCALVERSION_AUTO=y/CONFIG_LOCALVERSION_AUTO=n/g' .config
 export IMAGE_KERNEL="uImage"
 make ${IMAGE_KERNEL} vmlinux dtbs LOADADDR=0xC2000040 O="${OUTPUT_BUILD_DIR}" LOCALVERSION=
 make modules O="${OUTPUT_BUILD_DIR}" LOCALVERSION=
@@ -122,7 +120,9 @@ make INSTALL_MOD_PATH="${OUTPUT_BUILD_DIR}/install_artifact" modules_install O="
 mkdir -p ${OUTPUT_BUILD_DIR}/install_artifact/boot/dtbs/
 rm ${OUTPUT_BUILD_DIR}/install_artifact/lib/modules/6.6.48/build
 cp ${OUTPUT_BUILD_DIR}/arch/${ARCH}/boot/${IMAGE_KERNEL} ${OUTPUT_BUILD_DIR}/install_artifact/boot/
-find ${OUTPUT_BUILD_DIR}/arch/${ARCH}/boot/dts/ -name 'st*.dtb' -exec cp '{}' ${OUTPUT_BUILD_DIR}/install_artifact/boot/dtbs/ \;
+cp ${OUTPUT_BUILD_DIR}/arch/${ARCH}/boot/dts/st/${MACHINE}.dtb ${OUTPUT_BUILD_DIR}/install_artifact/boot/dtbs/
+# To copy all the available ST *.dtb files do:
+# find ${OUTPUT_BUILD_DIR}/arch/${ARCH}/boot/dts/ -name 'st*.dtb' -exec cp '{}' ${OUTPUT_BUILD_DIR}/install_artifact/boot/dtbs/ \;
 ```
 Artifacts:
 * linux/build/install_artifact/boot/uImage
@@ -132,9 +132,9 @@ Artifacts:
 ## Debian rootfs
 ```bash
 cd ${WORKSPACE_DIR}
-wget -c https://rcn-ee.com/rootfs/eewiki/minfs/debian-12.9-minimal-armhf-2025-02-05.tar.xz
-tar xf debian-12.9-minimal-armhf-2025-02-05.tar.xz
-export ROOTFS_TAR=${WORKSPACE_DIR}/debian-12.9-minimal-armhf-2025-02-05/armhf-rootfs-debian-bookworm.tar
+wget -c https://rcn-ee.com/rootfs/eewiki/minfs/debian-12.11-minimal-armhf-2025-06-01.tar.xz
+tar xf debian-12.11-minimal-armhf-2025-06-01.tar.xz
+export ROOTFS_TAR=${WORKSPACE_DIR}/debian-12.11-minimal-armhf-2025-06-01/armhf-rootfs-debian-bookworm.tar
 ```
 
 ## Populate the SD card
@@ -198,12 +198,11 @@ sudo sh -c "echo 'TIMEOUT 10' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo 'DEFAULT Linux' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo 'LABEL Linux' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo '    KERNEL /boot/uImage' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
-# sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=/dev/mmcblk0p5 rw rootfstype=ext4 rootwait' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=PARTUUID=${ROOTFS_PARTUUID} rw rootfstype=ext4 rootwait' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo sh -c "echo '    FDTDIR /boot/dtbs' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo cp -rv ./linux/build/install_artifact/boot/* ${ROOTFS}/boot/
 sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
-sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-ro  0  1' >> ${ROOTFS}/etc/fstab"
+sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-ro  0  1' > ${ROOTFS}/etc/fstab"
 sudo mkdir -p ${ROOTFS}/boot/firmware/
 sudo cp resources/sysconf.txt ${ROOTFS}/boot/firmware/
 # Copy/replace the Broadcom/Cypress 802.11 wireless card firmware
