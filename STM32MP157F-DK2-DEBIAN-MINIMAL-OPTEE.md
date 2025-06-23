@@ -99,10 +99,10 @@ Artifacts:
 
 Based on the [meta-st-odyssey](https://github.com/Seeed-Studio/meta-st-odyssey/tree/openstlinux-6.1-yocto-mickledore). Execute after the `git clone` command:
 ```bash
-cp resources/stm32mp157c-odyssey/trusted-firmware-a-patch/stm32mp1_def.h arm-trusted-firmware/plat/st/stm32mp1/
-cp resources/stm32mp157c-odyssey/trusted-firmware-a-patch/stm32mp1_shared_resources.c arm-trusted-firmware/plat/st/stm32mp1/
-cp resources/stm32mp157c-odyssey/trusted-firmware-a-patch/stm32mp157c-odyssey-som.dtsi arm-trusted-firmware/fdts/
-cp resources/stm32mp157c-odyssey/trusted-firmware-a-patch/stm32mp157c-odyssey.dts arm-trusted-firmware/fdts/
+cp resources/stm32mp157c-odyssey/arm-trusted-firmware-patch/stm32mp1_def.h arm-trusted-firmware/plat/st/stm32mp1/
+cp resources/stm32mp157c-odyssey/arm-trusted-firmware-patch/stm32mp1_shared_resources.c arm-trusted-firmware/plat/st/stm32mp1/
+cp resources/stm32mp157c-odyssey/arm-trusted-firmware-patch/stm32mp157c-odyssey-som.dtsi arm-trusted-firmware/fdts/
+cp resources/stm32mp157c-odyssey/arm-trusted-firmware-patch/stm32mp157c-odyssey.dts arm-trusted-firmware/fdts/
 ```
 </details>
 
