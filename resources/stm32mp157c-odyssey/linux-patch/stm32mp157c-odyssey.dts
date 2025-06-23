@@ -1,4 +1,4 @@
-// linux/stm32mp157c-odyssey.dts
+// linux/arch/arm/boot/dts/stm32mp157c-odyssey.dts
 // SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 /*
  * Copyright (C) 2020 Marcin Sloniewski <marcin.sloniewski@gmail.com>.

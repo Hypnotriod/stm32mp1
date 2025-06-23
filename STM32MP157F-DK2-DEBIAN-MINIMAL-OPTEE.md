@@ -8,6 +8,7 @@ export SDK_DIR=${WORKSPACE_DIR}/sdk
 export UBOOT_DIR=${WORKSPACE_DIR}/u-boot
 export OPTEE_DIR=${WORKSPACE_DIR}/optee_os
 export MACHINE=stm32mp157f-dk2
+# export MACHINE=stm32mp157c-odyssey
 ```
 
 ## STM32mpu SDK
@@ -27,6 +28,20 @@ sudo apt install libncurses5-dev libncursesw5-dev libyaml-dev u-boot-tools
 * [U-Boot for stm32mp1](https://docs.u-boot.org/en/latest/board/st/stm32mp1.html)
 * [STM32MP15 U-Boot](https://wiki.stmicroelectronics.cn/stm32mpu/wiki/STM32MP25_U-Boot)
 * [STM32MP15 U-Boot build](https://wiki.st.com/stm32mpu/wiki/U-Boot_overview#U-Boot_build)
+
+<details>
+<summary>stm32mp157c-odyssey patch</summary>
+
+Based on the [meta-st-odyssey](https://github.com/Seeed-Studio/meta-st-odyssey/tree/openstlinux-6.1-yocto-mickledore). Execute after the `git clone` command:
+```bash
+cp resources/stm32mp157c-odyssey/u-boot-patch/stm32mp1.c u-boot/board/st/stm32mp1/
+cp resources/stm32mp157c-odyssey/u-boot-patch/stm32mp15_defconfig u-boot/configs/
+cp resources/stm32mp157c-odyssey/u-boot-patch/stm32mp157c-odyssey-som-u-boot.dtsi u-boot/arch/arm/dts/
+cp resources/stm32mp157c-odyssey/u-boot-patch/stm32mp157c-odyssey-som.dtsi u-boot/arch/arm/dts/
+cp resources/stm32mp157c-odyssey/u-boot-patch/stm32mp157c-odyssey.dts u-boot/arch/arm/dts/
+```
+</details>
+
 ```bash
 cd ${WORKSPACE_DIR}
 git clone -b v2023.10-stm32mp-r1.2 https://github.com/STMicroelectronics/u-boot --depth=1
@@ -43,6 +58,21 @@ Artifacts:
 
 ## OP-TEE (Open Portable Trusted Execution Environment)
 * [How to build OP-TEE components](https://wiki.st.com/stm32mpu/wiki/How_to_build_OP-TEE_components)
+
+<details>
+<summary>stm32mp157c-odyssey patch</summary>
+
+Based on the [meta-st-odyssey](https://github.com/Seeed-Studio/meta-st-odyssey/tree/openstlinux-6.1-yocto-mickledore). Execute after the `git clone` command:
+```bash
+cp resources/stm32mp157c-odyssey/optee_os-patch/clk-stm32mp15.c optee_os/core/drivers/clk/
+cp resources/stm32mp157c-odyssey/optee_os-patch/conf.mk optee_os/core/arch/arm/plat-stm32mp1/
+cp resources/stm32mp157c-odyssey/optee_os-patch/platform_config.h optee_os/core/arch/arm/plat-stm32mp1/
+cp resources/stm32mp157c-odyssey/optee_os-patch/shared_resources.c optee_os/core/arch/arm/plat-stm32mp1/
+cp resources/stm32mp157c-odyssey/optee_os-patch/stm32mp157c-odyssey.dts optee_os/core/arch/arm/dts/
+cp resources/stm32mp157c-odyssey/optee_os-patch/stm32mp157c-odyssey.dtsi optee_os/core/arch/arm/dts/
+```
+</details>
+
 ```bash
 cd ${WORKSPACE_DIR}
 git clone -b 4.0.0-stm32mp-r1.2 https://github.com/STMicroelectronics/optee_os.git --depth=1
@@ -62,7 +92,20 @@ Artifacts:
 ## TF-A (Arm Trusted Firmware-A) / FIP (Firmware Image Package)
 * [Trusted Firmware build instructions](https://trustedfirmware-a.readthedocs.io/en/lts-v2.10/plat/st/stm32mp1.html#build-instructions)
 * [Trusted Firmware doc](https://trustedfirmware-a.readthedocs.io/en/stable/plat/st/stm32mp1.html)
-* `-pedantic` flag in `HOSTCCFLAGS` of `arm-trusted-firmware/tools/fiptool/Makefile` may cause the `ISO C does not support the '_FloatXX' type` errors during the build. Can be removed.
+* The `-pedantic` flag in `HOSTCCFLAGS` from `arm-trusted-firmware/tools/fiptool/Makefile` may cause the `ISO C does not support the '_FloatXX' type` errors during the fiptool compilation. Can be removed.
+
+<details>
+<summary>stm32mp157c-odyssey patch</summary>
+
+Based on the [meta-st-odyssey](https://github.com/Seeed-Studio/meta-st-odyssey/tree/openstlinux-6.1-yocto-mickledore). Execute after the `git clone` command:
+```bash
+cp resources/stm32mp157c-odyssey/trusted-firmware-a-patch/stm32mp1_def.h arm-trusted-firmware/plat/st/stm32mp1/
+cp resources/stm32mp157c-odyssey/trusted-firmware-a-patch/stm32mp1_shared_resources.c arm-trusted-firmware/plat/st/stm32mp1/
+cp resources/stm32mp157c-odyssey/trusted-firmware-a-patch/stm32mp157c-odyssey-som.dtsi arm-trusted-firmware/fdts/
+cp resources/stm32mp157c-odyssey/trusted-firmware-a-patch/stm32mp157c-odyssey.dts arm-trusted-firmware/fdts/
+```
+</details>
+
 ```bash
 cd ${WORKSPACE_DIR}
 git clone -b v2.10-stm32mp-r1.2 https://github.com/STMicroelectronics/arm-trusted-firmware.git --depth=1
@@ -103,6 +146,18 @@ Artifacts:
 
 ## Linux kernel
 * [Modify, rebuild and reload the Linux kernel](https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP2_boards/STM32MP257x-DK/Develop_on_Arm_Cortex-A35/Modify,_rebuild_and_reload_the_Linux_kernel)
+
+<details>
+<summary>stm32mp157c-odyssey patch</summary>
+
+Based on the [meta-st-odyssey](https://github.com/Seeed-Studio/meta-st-odyssey/tree/openstlinux-6.1-yocto-mickledore). Execute after the `git clone` command:
+```bash
+cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey-scmi.dtsi linux/arch/arm/boot/dts/
+cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey-som.dtsi linux/arch/arm/boot/dts/
+cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey.dts linux/arch/arm/boot/dts/
+```
+</details>
+
 ```bash
 cd ${WORKSPACE_DIR}
 git clone -b v6.6-stm32mp-r1.2 https://github.com/STMicroelectronics/linux.git --depth=1
