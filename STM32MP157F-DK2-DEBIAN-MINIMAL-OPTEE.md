@@ -110,6 +110,8 @@ cp resources/stm32mp157c-odyssey/arm-trusted-firmware-patch/stm32mp157c-odyssey.
 cd ${WORKSPACE_DIR}
 git clone -b v2.10-stm32mp-r1.2 https://github.com/STMicroelectronics/arm-trusted-firmware.git --depth=1
 cd arm-trusted-firmware/
+# Remove the -pedantic flag to be able to compile the fiptool
+sed -i 's/ -pedantic//g' tools/fiptool/Makefile
 source ${SDK_DIR}/environment-setup
 unset LDFLAGS;
 unset CFLAGS;
