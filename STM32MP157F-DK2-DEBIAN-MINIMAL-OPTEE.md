@@ -18,8 +18,8 @@ Download the latest [STM32MP1 OpenSTLinux Developer Package](https://www.st.com/
 Extract and install the SDK:   
 ```bash
 tar xvf en.SDK-x86_64-stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.tar.gz
-chmod +x stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06/sdk/st-image-weston-openstlinux-weston-stm32mp1.rootfs-x86_64-toolchain-5.0.3-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.sh
-./stm32mp1-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06/sdk/st-image-weston-openstlinux-weston-stm32mp1.rootfs-x86_64-toolchain-5.0.3-openstlinux-6.6-yocto-scarthgap-mpu-v24.11.06.sh -d ${SDK_DIR}
+chmod +x stm32mp1-openstlinux-*/sdk/st-image-weston-*.sh
+./stm32mp1-openstlinux-*/sdk/st-image-weston-*.sh -d ${SDK_DIR}
 sudo apt install build-essential swig libgnutls28-dev
 sudo apt install libncurses5-dev libncursesw5-dev libyaml-dev u-boot-tools
 ```
