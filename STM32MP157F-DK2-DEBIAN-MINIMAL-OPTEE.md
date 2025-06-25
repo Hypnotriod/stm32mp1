@@ -3,7 +3,7 @@ Based on: [debian-getting-started-with-the-stm32mp157](https://forum.digikey.com
 
 ## Prepare the environment inside your working directory
 ```bash
-export WORKSPACE_DIR=`pwd`
+export WORKSPACE_DIR=$PWD
 export SDK_DIR=${WORKSPACE_DIR}/sdk
 export UBOOT_DIR=${WORKSPACE_DIR}/u-boot
 export OPTEE_DIR=${WORKSPACE_DIR}/optee_os
