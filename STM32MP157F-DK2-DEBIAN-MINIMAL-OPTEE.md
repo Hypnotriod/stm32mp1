@@ -132,7 +132,10 @@ make PLAT=stm32mp1 \
     BL32_EXTRA2=${OPTEE_DIR}/build/core/tee-pageable_v2.bin \
     all fip
 ```
-Create fip with fiptool (alternative way, skip this part).
+
+<details>
+<summary>Create fip with the fiptool (alternative way).</summary>
+
 ```bash
 fiptool create \
     --tos-fw ${OPTEE_DIR}/build/core/tee-header_v2.bin \
@@ -142,6 +145,8 @@ fiptool create \
     --hw-config ${UBOOT_DIR}/out/u-boot.dtb \
     build/stm32mp1/release/fip.bin
 ```
+</details>
+
 Artifacts:
 * arm-trusted-firmware/build/stm32mp1/release/fip.bin
 * arm-trusted-firmware/build/stm32mp1/release/tf-a-stm32mp157f-dk2.stm32
