@@ -30,19 +30,19 @@
 		#size-cells = <1>;
 		ranges;
 
-		mcusram1: mcuram@10000000 {
+		mcusram1: mcuram1@10000000 {
 			compatible = "shared-dma-pool";
 			reg = <0x10000000 0x20000>;
 			no-map;
 		};
 
-		mcusram2: mcuram@10020000 {
+		mcusram2: mcuram2@10020000 {
 			compatible = "shared-dma-pool";
 			reg = <0x10020000 0x20000>;
 			no-map;
 		};
 
-		mcusram3: mcuram@10040000 {
+		mcusram3: mcuram3@10040000 {
 			compatible = "shared-dma-pool";
 			reg = <0x10040000 0x10000>;
 			no-map;
@@ -172,7 +172,7 @@
 };
 
 &hash1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &i2c1 {
