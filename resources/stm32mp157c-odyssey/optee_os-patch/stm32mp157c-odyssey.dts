@@ -92,6 +92,7 @@
 		compatible = "focaltech,ft6236";
 		reg = <0x38>;
 		interrupts = <2 2>;
+		#interrupt-cells = <2>;
 		interrupt-parent = <&gpiof>;
 		interrupt-controller;
 		touchscreen-size-x = <480>;
