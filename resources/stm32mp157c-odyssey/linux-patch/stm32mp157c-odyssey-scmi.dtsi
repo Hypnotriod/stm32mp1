@@ -1,4 +1,4 @@
-// linux/arch/arm/boot/dts/stm32mp157c-odyssey-scmi.dtsi
+// linux/arch/arm/boot/dts/st/stm32mp157c-odyssey-scmi.dtsi
 // SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 /*
  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved

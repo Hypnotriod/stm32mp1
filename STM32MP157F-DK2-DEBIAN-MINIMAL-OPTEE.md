@@ -159,9 +159,9 @@ Artifacts:
 
 Based on the [meta-st-odyssey](https://github.com/Seeed-Studio/meta-st-odyssey/tree/openstlinux-6.1-yocto-mickledore). Execute after the `git clone` command:
 ```bash
-cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey-scmi.dtsi linux/arch/arm/boot/dts/
-cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey-som.dtsi linux/arch/arm/boot/dts/
-cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey.dts linux/arch/arm/boot/dts/
+cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey-scmi.dtsi linux/arch/arm/boot/dts/st/
+cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey-som.dtsi linux/arch/arm/boot/dts/st/
+cp resources/stm32mp157c-odyssey/linux-patch/stm32mp157c-odyssey.dts linux/arch/arm/boot/dts/st/
 ```
 </details>
 
