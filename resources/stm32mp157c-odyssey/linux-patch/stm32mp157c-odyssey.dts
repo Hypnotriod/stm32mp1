@@ -39,20 +39,19 @@
 	max-speed = <1000>;
 	phy-handle = <&phy0>;
 	st,eth-clk-sel;
-
-	snps,reset-gpio = <&gpiog 0 GPIO_ACTIVE_LOW>;
-	snps,reset-active-low;
-	snps,reset-delays-us = <0 30000 50000>;
+	phy-reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
 
 	mdio0 {
+		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
 		compatible = "snps,dwmac-mdio";
-		phy0: ethernet-phy@7 { /* KSZ9031RN */
+
+		phy0: ethernet-phy@7 {
 			reg = <7>;
-			reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>; /* ETH_RST# */
-			reset-assert-us = <10000>;
-			reset-deassert-us = <300>;
+			reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
+			reset-assert-us = <11000>;
+			reset-deassert-us = <1000>;
 		};
 	};
 };
