@@ -264,7 +264,9 @@ sudo sh -c "echo '    APPEND console=ttySTM0,115200 root=PARTUUID=${ROOTFS_PARTU
 sudo sh -c "echo '    FDTDIR /boot/dtbs' >> ${ROOTFS}/boot/extlinux/extlinux.conf"
 sudo cp -rv ./linux/build/install_artifact/boot/* ${ROOTFS}/boot/
 sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
-sudo sh -c "echo '/dev/mmcblk0p5  /  auto  errors=remount-ro  0  1' > ${ROOTFS}/etc/fstab"
+sudo sh -c "echo 'PARTUUID=${ROOTFS_PARTUUID}  /  auto  errors=remount-ro  0  1' > ${ROOTFS}/etc/fstab"
+sudo sh -c "echo 'auto end0' >> ${ROOTFS}/etc/network/interfaces"
+sudo sh -c "echo 'iface end0 inet dhcp' >> ${ROOTFS}/etc/network/interfaces"
 sudo mkdir -p ${ROOTFS}/boot/firmware/
 sudo cp resources/sysconf.txt ${ROOTFS}/boot/firmware/
 # Copy/replace the Broadcom/Cypress 802.11 wireless card firmware
