@@ -275,10 +275,22 @@ sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/l
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/vendor/lib/* ${ROOTFS}/lib/
 sync
 ```
+
+<details>
+<summary>stm32mp157c-odyssey patch</summary>
+
+Create syminks for the Wi-Fi module firmware
+```bash
+sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.seed,stm32mp157c-odyssey.bin
+sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.txt ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.seed,stm32mp157c-odyssey.txt
+```
+</details>
+
 Edit the `${ROOTFS}/boot/firmware/sysconf.txt` file to setup essential system configurations, such as `user name`, `user password`, `hostname`, etc, at the system boot using the `bbbio-set-sysconf.service`. You can disable it with `sudo systemctl disable bbbio-set-sysconf`  
 Unmount the rootfs partition and detach loop device (if used)
 ```bash
 sudo umount ${DISK_P}5
+# In case of the loop device
 sudo losetup -d ${DISK}
 ```
 
