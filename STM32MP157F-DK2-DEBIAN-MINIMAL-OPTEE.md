@@ -281,8 +281,8 @@ sync
 
 Create syminks for the Wi-Fi module firmware
 ```bash
-sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.seed,stm32mp157c-odyssey.bin
-sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.txt ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.seed,stm32mp157c-odyssey.txt
+sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.seeed,stm32mp157c-odyssey.bin
+sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.txt ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.seeed,stm32mp157c-odyssey.txt
 ```
 </details>
 
