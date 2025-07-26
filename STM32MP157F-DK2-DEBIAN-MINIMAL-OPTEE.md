@@ -194,9 +194,9 @@ Artifacts:
 ## Debian rootfs
 ```bash
 cd ${WORKSPACE_DIR}
-wget -c https://rcn-ee.com/rootfs/eewiki/minfs/debian-12.11-minimal-armhf-2025-06-01.tar.xz
-tar xf debian-12.11-minimal-armhf-2025-06-01.tar.xz
-export ROOTFS_TAR=${WORKSPACE_DIR}/debian-12.11-minimal-armhf-2025-06-01/armhf-rootfs-debian-bookworm.tar
+wget -c https://rcn-ee.com/rootfs/eewiki/minfs/debian-12.9-minimal-armhf-2025-02-05.tar.xz
+tar xf debian-12.9-minimal-armhf-2025-02-05.tar.xz
+export ROOTFS_TAR=${WORKSPACE_DIR}/debian-12.9-minimal-armhf-2025-02-05/armhf-rootfs-debian-bookworm.tar
 ```
 
 ## Populate the SD card
@@ -265,8 +265,6 @@ sudo sh -c "echo '    FDTDIR /boot/dtbs' >> ${ROOTFS}/boot/extlinux/extlinux.con
 sudo cp -rv ./linux/build/install_artifact/boot/* ${ROOTFS}/boot/
 sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
 sudo sh -c "echo 'PARTUUID=${ROOTFS_PARTUUID}  /  auto  errors=remount-ro  0  1' > ${ROOTFS}/etc/fstab"
-sudo sh -c "echo 'auto end0' >> ${ROOTFS}/etc/network/interfaces"
-sudo sh -c "echo 'iface end0 inet dhcp' >> ${ROOTFS}/etc/network/interfaces"
 sudo mkdir -p ${ROOTFS}/boot/firmware/
 sudo cp resources/sysconf.txt ${ROOTFS}/boot/firmware/
 # Copy/replace the Broadcom/Cypress 802.11 wireless card firmware
@@ -279,10 +277,10 @@ sync
 <details>
 <summary>stm32mp157c-odyssey patch</summary>
 
-Create syminks for the Wi-Fi module firmware
+Configure the Wi-Fi module firmware
 ```bash
+sudo cp resources/stm32mp157c-odyssey/brcmfmac43430-sdio.seeed,stm32mp157c-odyssey.txt ${ROOTFS}/usr/lib/firmware/brcm/
 sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.seeed,stm32mp157c-odyssey.bin
-sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.txt ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.seeed,stm32mp157c-odyssey.txt
 ```
 </details>
 
