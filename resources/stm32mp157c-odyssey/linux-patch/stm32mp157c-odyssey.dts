@@ -18,6 +18,7 @@
 	aliases {
 		ethernet0 = &ethernet0;
 		serial0 = &uart4;
+		serial3 = &usart1;
 	};
 
 	chosen {
@@ -151,31 +152,6 @@
 		};
 	};
 
-	// bluetooth pin configure
-	btreg_s: bt_reg_on-1 {
-		reset_gpio {
-			pinmux = <STM32_PINMUX('H', 9, GPIO)>;
-			drive-push-pull;
-			bias-pull-up;
-			output-high;
-			slew-rate = <0>;
-		};
-		wake_gpio {
-			pinmux = <STM32_PINMUX('H', 8, GPIO)>;
-			drive-push-pull;
-			bias-pull-up;
-			output-high;
-			slew-rate = <0>;
-		};
-		wake_host_gpio {
-			pinmux = <STM32_PINMUX('H', 3, GPIO)>;
-			drive-push-pull;
-			bias-pull-up;
-			output-high;
-			slew-rate = <0>;
-		};
-	};
-
 	rtc_out2_rmp_pins_a: rtc-out2-rmp-pins-0 {
 		pins {
 			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_OUT2_RMP */
@@ -203,10 +179,15 @@
 	usart1_idle_pins_s: usart1-idle-0 {
 		pins1 {
 			pinmux = <STM32_PINMUX('Z', 7, ANALOG)>, /* USART1_TX */
-				<STM32_PINMUX('Z', 5, ANALOG)>, /* USART1_RTS */
 				<STM32_PINMUX('Z', 3, ANALOG)>; /* USART1_CTS_NSS */
 		};
 		pins2 {
+			pinmux = <STM32_PINMUX('Z', 5, AF7)>; /* USART1_RTS */
+			bias-disable;
+			drive-push-pull;
+			slew-rate = <0>;
+		};
+		pins3 {
 			pinmux = <STM32_PINMUX('Z', 6, AF7)>; /* USART1_RX */
 			bias-disable;
 		};
@@ -250,14 +231,17 @@
 	pinctrl-0 = <&usart1_pins_s>;
 	pinctrl-1 = <&usart1_sleep_pins_s>;
 	pinctrl-2 = <&usart1_idle_pins_s>;
-	st,hw-flow-ctrl;
+	uart-has-rtscts;
 	status = "okay";
 
 	bluetooth {
-		pinctrl-names = "default";
-		pinctrl-0 = <&btreg_s>;
+		host-wakeup-gpios = <&gpioh 3 GPIO_ACTIVE_HIGH>;
+		device-wakeup-gpios = <&gpioh 8 GPIO_ACTIVE_HIGH>;
+		shutdown-gpios = <&gpioh 9 GPIO_ACTIVE_HIGH>;
 		compatible = "brcm,bcm43438-bt";
 		max-speed = <3000000>;
+		vbat-supply = <&v3v3>;
+		vddio-supply = <&v3v3>;
 	};
 };
 

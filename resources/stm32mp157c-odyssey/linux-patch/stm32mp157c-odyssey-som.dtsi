@@ -281,11 +281,13 @@
 };
 
 &cpu0{
-       cpu-supply = <&vddcore>;
+    cpu-supply = <&vddcore>;
+	clock-frequency = <650000000>;
 };
 
 &cpu1{
-       cpu-supply = <&vddcore>;
+    cpu-supply = <&vddcore>;
+	clock-frequency = <650000000>;
 };
 
 &usbh_ehci {
@@ -302,6 +304,8 @@
 	status = "okay";
 	dr_mode = "host";
 	phy-names = "usb2-phy";
+	vusb_d-supply = <&vdd_usb>;
+	vusb_a-supply = <&reg18>;
 	phys = <&usbphyc_port1 0>;
 	vbus-supply = <&vbus_otg>;
 };

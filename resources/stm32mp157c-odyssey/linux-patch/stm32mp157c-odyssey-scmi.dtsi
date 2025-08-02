@@ -53,6 +53,7 @@
 };
 
 &iwdg2 {
+	interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
 	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
 };
 

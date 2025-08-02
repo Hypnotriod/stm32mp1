@@ -53,7 +53,7 @@ make stm32mp15_defconfig
 make DEVICE_TREE=${MACHINE} all
 ```
 Artifacts:
-* u-boot/out/u-boot.bin
+* u-boot/out/u-boot.dtb
 * u-boot/out/u-boot-nodtb.bin
 
 ## OP-TEE (Open Portable Trusted Execution Environment)
