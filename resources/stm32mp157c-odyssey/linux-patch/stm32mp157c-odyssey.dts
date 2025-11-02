@@ -371,7 +371,7 @@
 };
 
 &dsi_in {
-	remote-endpoint = <&ltdc_ep1_out>;
+	remote-endpoint = <&ltdc_ep0_out>;
 };
 
 &dsi_out {
@@ -389,10 +389,8 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		ltdc_ep1_out: endpoint@0 {
-			reg = <0>;
+		ltdc_ep0_out: endpoint {
 			remote-endpoint = <&dsi_in>;
 		};
 	};
 };
-
