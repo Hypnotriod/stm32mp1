@@ -126,7 +126,7 @@
 				 <STM32_PINMUX('D',  8, ANALOG)>; /* LCD_B7 */
 		};
 	};
-}
+};
 
 &adc {
 	pinctrl-names = "default";
