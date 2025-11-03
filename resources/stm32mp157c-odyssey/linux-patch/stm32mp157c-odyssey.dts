@@ -352,6 +352,7 @@
 &dsi {
 	#address-cells = <1>;
 	#size-cells = <0>;
+	default-on;
 	status = "okay";
 
 	panel_otm8009a: panel-otm8009a@0 {
