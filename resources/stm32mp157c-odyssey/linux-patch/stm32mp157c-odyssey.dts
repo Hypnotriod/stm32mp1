@@ -38,6 +38,7 @@
 		compatible = "mmc-pwrseq-simple";
 		reset-gpios = <&gpiod 9 GPIO_ACTIVE_LOW>;
 		post-power-on-delay-ms = <1>;
+		status = "disabled";
 	};
 };
 
@@ -308,7 +309,7 @@
 	mmc-pwrseq = <&wifi_pwrseq>;
 	#address-cells = <1>;
 	#size-cells = <0>;
-	status = "okay";
+	status = "disabled";
 
 	brcmf: bcrmf@1 {
 		reg = <1>;
@@ -323,7 +324,7 @@
 	pinctrl-1 = <&usart1_sleep_pins_s>;
 	pinctrl-2 = <&usart1_idle_pins_s>;
 	uart-has-rtscts;
-	status = "okay";
+	status = "disabled";
 
 	bluetooth {
 		host-wakeup-gpios = <&gpioh 3 GPIO_ACTIVE_HIGH>;
