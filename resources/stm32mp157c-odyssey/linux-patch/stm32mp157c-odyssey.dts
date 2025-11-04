@@ -83,7 +83,7 @@
 	/delete-property/dmas;
 	/delete-property/dma-names;
 
-	/*touchscreen@38 {
+	touchscreen@38 {
 		compatible = "focaltech,ft6236";
 		reg = <0x38>;
 		interrupts = <2 2>;
@@ -94,7 +94,7 @@
 		iovcc-supply = <&v3v3>;
 		panel = <&panel_otm8009a>;
 		status = "okay";
-	};*/
+	};
 };
 
 &sdmmc1 {
