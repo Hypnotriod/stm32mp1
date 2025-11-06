@@ -267,6 +267,7 @@ sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
 sudo sh -c "echo 'PARTUUID=${ROOTFS_PARTUUID}  /  auto  errors=remount-ro  0  1' > ${ROOTFS}/etc/fstab"
 sudo mkdir -p ${ROOTFS}/boot/firmware/
 sudo cp resources/sysconf.txt ${ROOTFS}/boot/firmware/
+sudo sh -c "echo -e 'Debian GNU/Linux 12 \\n \l \n' > ${ROOTFS}/etc/issue"
 # Copy/replace the Broadcom/Cypress 802.11 wireless card firmware
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/* ${ROOTFS}/usr/lib/firmware/
 # Copy the GPU drivers
