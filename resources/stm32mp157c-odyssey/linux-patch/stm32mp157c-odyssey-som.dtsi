@@ -87,7 +87,6 @@
 		enable-active-high;
 		regulator-boot-on;
 		regulator-always-on;
-		status = "disabled";
 	};
 
 	usb_en2: usb-en2 {
