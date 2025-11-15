@@ -120,7 +120,6 @@ make PLAT=stm32mp1 \
     STM32MP13=0 \
     STM32MP15=1 \
     STM32MP_SDMMC=1 \
-    STM32MP_EMMC=0 \
     ARCH=aarch32 \
     ARM_ARCH_MAJOR=7 \
     AARCH32_SP=optee \
@@ -131,6 +130,13 @@ make PLAT=stm32mp1 \
     BL32_EXTRA1=${OPTEE_DIR}/build/core/tee-pager_v2.bin \
     BL32_EXTRA2=${OPTEE_DIR}/build/core/tee-pageable_v2.bin \
     all fip
+mv build/stm32mp1/release/tf-a-${MACHINE}.stm32 build/stm32mp1/release/tf-a-${MACHINE}-sdcard.stm32
+```
+
+To build the `TF-A` firmware for the eMMC boot area `boot0` and `boot1` partitions use:
+```bash
+make PLAT=stm32mp1 STM32MP13=0 STM32MP15=1 ARCH=aarch32 ARM_ARCH_MAJOR=7 DTB_FILE_NAME=${MACHINE}.dtb STM32MP_EMMC=1
+mv build/stm32mp1/release/tf-a-${MACHINE}.stm32 build/stm32mp1/release/tf-a-${MACHINE}-emmc.stm32
 ```
 
 <details>
@@ -149,7 +155,7 @@ fiptool create \
 
 Artifacts:
 * arm-trusted-firmware/build/stm32mp1/release/fip.bin
-* arm-trusted-firmware/build/stm32mp1/release/tf-a-stm32mp157f-dk2.stm32
+* arm-trusted-firmware/build/stm32mp1/release/tf-a-stm32mp157f-dk2-sdcard.stm32
 
 ## Linux kernel
 * [Modify, rebuild and reload the Linux kernel](https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP2_boards/STM32MP257x-DK/Develop_on_Arm_Cortex-A35/Modify,_rebuild_and_reload_the_Linux_kernel)
@@ -243,8 +249,8 @@ sudo sgdisk --resize-table=128 -a 1 \
     -A 5:set:2                  \
     -u 5:${ROOTFS_PARTUUID}     \
     -p ${DISK}
-sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 of=${DISK_P}1
-sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 of=${DISK_P}2
+sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}-sdcard.stm32 of=${DISK_P}1
+sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}-sdcard.stm32 of=${DISK_P}2
 sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}3
 sudo dd if=/dev/zero of=${DISK_P}4 bs=512K count=1
 sudo mkfs.ext4 -L rootfs ${DISK_P}5
