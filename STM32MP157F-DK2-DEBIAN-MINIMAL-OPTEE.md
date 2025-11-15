@@ -227,15 +227,18 @@ Also unmount all the previous SD card partitions and erase the partition table:
 umount ${DISK_P}X
 sudo dd if=/dev/zero of=${DISK} bs=1M count=10
 ```
-Alternatively to make an image file (4GB example) using the `loop device` do:
+Alternatively to make an image file (2GB example) using the `loop device` do:
 ```bash
 cd ${WORKSPACE_DIR}
 export IMAGE_FILE=${MACHINE}-sdcard.img
-dd if=/dev/zero of=${IMAGE_FILE} bs=1G count=4
+# In case of the eMMC image:
+# export IMAGE_FILE=${MACHINE}-emmc.img
+dd if=/dev/zero of=${IMAGE_FILE} bs=1G count=2
 export DISK=$(sudo losetup --partscan --show --find ${IMAGE_FILE})
 export DISK_P=${DISK}p
 ```
-Format the disk and populate with the artifacts:
+Format the disk and populate with the artifacts  
+For the `SD Card` do:
 ```bash
 cd ${WORKSPACE_DIR}
 export ROOTFS_PARTUUID=e91c4e10-16e6-4c0e-bd0e-77becf4a3582
@@ -254,7 +257,27 @@ sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}-sdcard.
 sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}3
 sudo dd if=/dev/zero of=${DISK_P}4 bs=512K count=1
 sudo mkfs.ext4 -L rootfs ${DISK_P}5
-# Mount the rootfs partition. The default /media/${USER}/rootfs path is used.
+```
+
+For the `eMMC image` do:
+```bash
+cd ${WORKSPACE_DIR}
+export ROOTFS_PARTUUID=491f6117-415d-4f53-88c9-6e0de54deac6
+sudo sgdisk -o /dev/mmcblk2
+sudo sgdisk --resize-table=128 -a 1 \
+    -n 1:1024:5119 -c 1:fip     \
+    -n 2:5120:6143 -c 2:u-boot-env \
+    -n 3:6144:     -c 3:rootfs  \
+    -A 3:set:2                  \
+    -u 3:${ROOTFS_PARTUUID}     \
+    -p ${DISK}
+sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}1
+sudo dd if=/dev/zero of=${DISK_P}2 bs=512K count=1
+sudo mkfs.ext4 -L rootfs ${DISK_P}3
+```
+
+Mount the `rootfs` partition. The default `/media/${USER}/rootfs` path is used.
+```bash
 export ROOTFS=/media/${USER}/rootfs
 sudo tar xpvf ${ROOTFS_TAR} -C ${ROOTFS}/
 sync
@@ -292,11 +315,30 @@ sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr
 </details>
 
 Edit the `${ROOTFS}/boot/firmware/sysconf.txt` file to setup essential system configurations, such as `user name`, `user password`, `hostname`, etc, at the system boot using the `bbbio-set-sysconf.service`. You can disable it with `sudo systemctl disable bbbio-set-sysconf`  
-Unmount the rootfs partition and detach loop device (if used)
+Unmount the rootfs partition and detach a loop device (if used)  
 ```bash
-sudo umount ${DISK_P}5
+sudo umount ${ROOTFS}
 # In case of the loop device
 sudo losetup -d ${DISK}
+```
+
+## Flash the eMMC image on target device from Linux
+Copy the `build/stm32mp1/release/tf-a-*-emmc.stm32` TF-A file to the target device.  
+Copy the `*-emmc.img` to the target device.  
+On target, call `lsblk` to determine the `eMMC` block device name. Replace the `mmcblk1` with the correct one:  
+```bash
+export BLOCK_DEVICE=mmcblk1
+sudo apt install -y mmc-utils
+sudo sh -c "echo 0 > /sys/block/${BLOCK_DEVICE}boot0/force_ro"
+sudo sh -c "echo 0 > /sys/block/${BLOCK_DEVICE}boot1/force_ro"
+dd if=tf-a-${MACHINE}-emmc.stm32 of=/dev/${BLOCK_DEVICE}boot0 conv=notrunc
+dd if=tf-a-${MACHINE}-emmc.stm32 of=/dev/${BLOCK_DEVICE}boot1 conv=notrunc
+sudo mmc bootpart enable 1 1 /dev/${BLOCK_DEVICE}
+sudo dd if=${MACHINE}-emmc.img of=/dev/${BLOCK_DEVICE}
+sync
+sudo parted /dev/${BLOCK_DEVICE} resizepart 3 -- -1
+sudo e2fsck -f /dev/${BLOCK_DEVICE}p3
+sudo resize2fs /dev/${BLOCK_DEVICE}p3
 ```
 
 ## In case of an image file, after it was flashed to a microSD card
