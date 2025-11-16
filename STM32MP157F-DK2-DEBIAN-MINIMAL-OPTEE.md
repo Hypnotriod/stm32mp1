@@ -7,8 +7,13 @@ export WORKSPACE_DIR=$PWD
 export SDK_DIR=${WORKSPACE_DIR}/sdk
 export UBOOT_DIR=${WORKSPACE_DIR}/u-boot
 export OPTEE_DIR=${WORKSPACE_DIR}/optee_os
+```
+Choose the machine name:
+```bash
 export MACHINE=stm32mp157f-dk2
-# export MACHINE=stm32mp157c-odyssey
+```
+```bash
+export MACHINE=stm32mp157c-odyssey
 ```
 
 ## STM32mpu SDK
@@ -116,11 +121,30 @@ source ${SDK_DIR}/environment-setup
 unset LDFLAGS;
 unset CFLAGS;
 make realclean
+```
+In case of the `SD card` do:
+```bash
 make PLAT=stm32mp1 \
     STM32MP13=0 \
     STM32MP15=1 \
     STM32MP_SDMMC=1 \
-    STM32MP_EMMC=0 \
+    ARCH=aarch32 \
+    ARM_ARCH_MAJOR=7 \
+    AARCH32_SP=optee \
+    DTB_FILE_NAME=${MACHINE}.dtb \
+    BL33=${UBOOT_DIR}/out/u-boot-nodtb.bin \
+    BL33_CFG=${UBOOT_DIR}/out/u-boot.dtb \
+    BL32=${OPTEE_DIR}/build/core/tee-header_v2.bin \
+    BL32_EXTRA1=${OPTEE_DIR}/build/core/tee-pager_v2.bin \
+    BL32_EXTRA2=${OPTEE_DIR}/build/core/tee-pageable_v2.bin \
+    all fip
+```
+In case of the `eMMC` do:
+```bash
+make PLAT=stm32mp1 \
+    STM32MP13=0 \
+    STM32MP15=1 \
+    STM32MP_EMMC=1 \
     ARCH=aarch32 \
     ARM_ARCH_MAJOR=7 \
     AARCH32_SP=optee \
@@ -199,19 +223,19 @@ tar xf debian-12.9-minimal-armhf-2025-02-05.tar.xz
 export ROOTFS_TAR=${WORKSPACE_DIR}/debian-12.9-minimal-armhf-2025-02-05/armhf-rootfs-debian-bookworm.tar
 ```
 
-## Populate the SD card
-* [Flash Layout SD card](https://wiki.st.com/stm32mpu/wiki/STM32CubeProgrammer_flashlayout#SD_card)
+## Populate the SD card or create the eMMC / SD card image file
+* [Flash Layout](https://wiki.st.com/stm32mpu/wiki/STM32CubeProgrammer_flashlayout)
 * [STM32 MPU Flash mapping](https://wiki.st.com/stm32mpu/wiki/STM32_MPU_Flash_mapping)
 * [extlinux.conf Menu Customization](https://www.willhaley.com/blog/extlinux-menu/)
 * [Debian logo wallpaper](https://github.com/shriramters/wallpapers/blob/main/bin/debian-swirl-4k-dark.png)
 
 Call `lsblk` to determine the device entry for the SD card.  
-In case of `/dev/sdX` do:
+In case of `sdX` (replace the `sdX` with the correct one) do:
 ```bash
 export DISK=/dev/sdX
 export DISK_P=${DISK}
 ```
-In case of `/dev/mmcblkX` do:
+In case of `mmcblkX` (replace the `mmcblkX` with the correct one) do:
 ```bash
 export DISK=/dev/mmcblkX
 export DISK_P=${DISK}p
@@ -221,15 +245,16 @@ Also unmount all the previous SD card partitions and erase the partition table:
 umount ${DISK_P}X
 sudo dd if=/dev/zero of=${DISK} bs=1M count=10
 ```
-Alternatively to make an image file (4GB example) using the `loop device` do:
+Alternatively to make an `SD card` / `eMMC` image file (2GB example) using the `loop device` do:
 ```bash
 cd ${WORKSPACE_DIR}
-export IMAGE_FILE=${MACHINE}-sdcard.img
-dd if=/dev/zero of=${IMAGE_FILE} bs=1G count=4
+export IMAGE_FILE=${MACHINE}.img
+dd if=/dev/zero of=${IMAGE_FILE} bs=1G count=2
 export DISK=$(sudo losetup --partscan --show --find ${IMAGE_FILE})
 export DISK_P=${DISK}p
 ```
-Format the disk and populate with the artifacts:
+Format the disk and populate with the artifacts  
+In case of the `SD card` or `SD card image` do:
 ```bash
 cd ${WORKSPACE_DIR}
 export ROOTFS_PARTUUID=e91c4e10-16e6-4c0e-bd0e-77becf4a3582
@@ -248,7 +273,27 @@ sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/tf-a-${MACHINE}.stm32 o
 sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}3
 sudo dd if=/dev/zero of=${DISK_P}4 bs=512K count=1
 sudo mkfs.ext4 -L rootfs ${DISK_P}5
-# Mount the rootfs partition. The default /media/${USER}/rootfs path is used.
+```
+
+In case of the `eMMC image` do:
+```bash
+cd ${WORKSPACE_DIR}
+export ROOTFS_PARTUUID=491f6117-415d-4f53-88c9-6e0de54deac6
+sudo sgdisk -o ${DISK}
+sudo sgdisk --resize-table=128 -a 1 \
+    -n 1:1024:5119 -c 1:fip     \
+    -n 2:5120:6143 -c 2:u-boot-env \
+    -n 3:6144:     -c 3:rootfs  \
+    -A 3:set:2                  \
+    -u 3:${ROOTFS_PARTUUID}     \
+    -p ${DISK}
+sudo dd if=./arm-trusted-firmware/build/stm32mp1/release/fip.bin of=${DISK_P}1
+sudo dd if=/dev/zero of=${DISK_P}2 bs=512K count=1
+sudo mkfs.ext4 -L rootfs ${DISK_P}3
+```
+
+Mount the `rootfs` partition. The default `/media/${USER}/rootfs` path is used.
+```bash
 export ROOTFS=/media/${USER}/rootfs
 sudo tar xpvf ${ROOTFS_TAR} -C ${ROOTFS}/
 sync
@@ -267,7 +312,7 @@ sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
 sudo sh -c "echo 'PARTUUID=${ROOTFS_PARTUUID}  /  auto  errors=remount-ro  0  1' > ${ROOTFS}/etc/fstab"
 sudo mkdir -p ${ROOTFS}/boot/firmware/
 sudo cp resources/sysconf.txt ${ROOTFS}/boot/firmware/
-sudo sh -c "echo -e 'Debian GNU/Linux 12 \134n \l \n' > ${ROOTFS}/etc/issue"
+sudo sh -c "echo 'Debian GNU/Linux 12 \134n \l \n' > ${ROOTFS}/etc/issue"
 # Copy/replace the Broadcom/Cypress 802.11 wireless card firmware
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/* ${ROOTFS}/usr/lib/firmware/
 # Copy the GPU drivers
@@ -286,22 +331,47 @@ sudo ln -sr ${ROOTFS}/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin ${ROOTFS}/usr
 </details>
 
 Edit the `${ROOTFS}/boot/firmware/sysconf.txt` file to setup essential system configurations, such as `user name`, `user password`, `hostname`, etc, at the system boot using the `bbbio-set-sysconf.service`. You can disable it with `sudo systemctl disable bbbio-set-sysconf`  
-Unmount the rootfs partition and detach loop device (if used)
+Unmount the rootfs partition and detach a loop device (if used)  
 ```bash
-sudo umount ${DISK_P}5
+sudo umount ${ROOTFS}
 # In case of the loop device
 sudo losetup -d ${DISK}
+```
+
+## Flash the eMMC image on the target device from Linux
+* [Bootable eMMC](https://linux-sunxi.org/Bootable_eMMC)
+* [mmc-utils / mmc](https://manpages.debian.org/testing/mmc-utils/mmc.1.en.html)  
+
+Transfer the `build/stm32mp1/release/tf-a-*.stm32` TF-A file (built with the `STM32MP_EMMC=1` option) to the target device.  
+Transfer the eMMC image `*.img` file to the target device.  
+On target, call `lsblk` to determine the `eMMC` block device name.  
+Set the correct values for the `BLOCK_DEVICE` and `MACHINE` environment variables:  
+```bash
+export BLOCK_DEVICE=mmcblkX
+export MACHINE=stm32mp157c-odyssey
+sudo apt install -y mmc-utils
+sudo sh -c "echo 0 > /sys/block/${BLOCK_DEVICE}boot0/force_ro"
+sudo sh -c "echo 0 > /sys/block/${BLOCK_DEVICE}boot1/force_ro"
+sudo dd if=tf-a-${MACHINE}.stm32 of=/dev/${BLOCK_DEVICE}boot0 conv=notrunc
+sudo dd if=tf-a-${MACHINE}.stm32 of=/dev/${BLOCK_DEVICE}boot1 conv=notrunc
+sudo mmc bootbus set single_backward x1 x1 /dev/${BLOCK_DEVICE}
+sudo mmc bootpart enable 1 1 /dev/${BLOCK_DEVICE}
+sudo dd if=${MACHINE}.img of=/dev/${BLOCK_DEVICE}
+# Grow the rootfs partition to the full eMMC capacity
+sudo parted /dev/${BLOCK_DEVICE} resizepart 3 -- -1
+sudo e2fsck -f /dev/${BLOCK_DEVICE}p3
+sudo resize2fs /dev/${BLOCK_DEVICE}p3
 ```
 
 ## In case of an image file, after it was flashed to a microSD card
 Use the following code snippet to grow the `rootfs` partition to the full microSD card capacity:  
 Call `lsblk` to determine the device entry for the SD card.  
-In case of `/dev/sdX` do:
+In case of `sdX` (replace the `sdX` with the correct one) do:
 ```bash
 export DISK=/dev/sdX
 export DISK_P=${DISK}
 ```
-In case of `/dev/mmcblkX` do:
+In case of `mmcblkX` (replace the `mmcblkX` with the correct one) do:
 ```bash
 export DISK=/dev/mmcblkX
 export DISK_P=${DISK}p
