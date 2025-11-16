@@ -254,7 +254,7 @@ export DISK=$(sudo losetup --partscan --show --find ${IMAGE_FILE})
 export DISK_P=${DISK}p
 ```
 Format the disk and populate with the artifacts  
-In case of the `SD card` do:
+In case of the `SD card` or `SD card image` do:
 ```bash
 cd ${WORKSPACE_DIR}
 export ROOTFS_PARTUUID=e91c4e10-16e6-4c0e-bd0e-77becf4a3582
