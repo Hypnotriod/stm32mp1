@@ -122,7 +122,7 @@ unset LDFLAGS;
 unset CFLAGS;
 make realclean
 ```
-In case of the `SD Card` do:
+In case of the `SD card` do:
 ```bash
 make PLAT=stm32mp1 \
     STM32MP13=0 \
@@ -223,8 +223,8 @@ tar xf debian-12.9-minimal-armhf-2025-02-05.tar.xz
 export ROOTFS_TAR=${WORKSPACE_DIR}/debian-12.9-minimal-armhf-2025-02-05/armhf-rootfs-debian-bookworm.tar
 ```
 
-## Populate the SD card
-* [Flash Layout SD card](https://wiki.st.com/stm32mpu/wiki/STM32CubeProgrammer_flashlayout#SD_card)
+## Populate the SD card or create the eMMC / SD card image file
+* [Flash Layout](https://wiki.st.com/stm32mpu/wiki/STM32CubeProgrammer_flashlayout)
 * [STM32 MPU Flash mapping](https://wiki.st.com/stm32mpu/wiki/STM32_MPU_Flash_mapping)
 * [extlinux.conf Menu Customization](https://www.willhaley.com/blog/extlinux-menu/)
 * [Debian logo wallpaper](https://github.com/shriramters/wallpapers/blob/main/bin/debian-swirl-4k-dark.png)
@@ -245,7 +245,7 @@ Also unmount all the previous SD card partitions and erase the partition table:
 umount ${DISK_P}X
 sudo dd if=/dev/zero of=${DISK} bs=1M count=10
 ```
-Alternatively to make an `SD Card` / `eMMC` image file (2GB example) using the `loop device` do:
+Alternatively to make an `SD card` / `eMMC` image file (2GB example) using the `loop device` do:
 ```bash
 cd ${WORKSPACE_DIR}
 export IMAGE_FILE=${MACHINE}.img
@@ -254,7 +254,7 @@ export DISK=$(sudo losetup --partscan --show --find ${IMAGE_FILE})
 export DISK_P=${DISK}p
 ```
 Format the disk and populate with the artifacts  
-In case of the `SD Card` do:
+In case of the `SD card` do:
 ```bash
 cd ${WORKSPACE_DIR}
 export ROOTFS_PARTUUID=e91c4e10-16e6-4c0e-bd0e-77becf4a3582
@@ -312,7 +312,7 @@ sudo cp -rv ./linux/build/install_artifact/lib/* ${ROOTFS}/lib/
 sudo sh -c "echo 'PARTUUID=${ROOTFS_PARTUUID}  /  auto  errors=remount-ro  0  1' > ${ROOTFS}/etc/fstab"
 sudo mkdir -p ${ROOTFS}/boot/firmware/
 sudo cp resources/sysconf.txt ${ROOTFS}/boot/firmware/
-sudo sh -c "echo -e 'Debian GNU/Linux 12 \134n \l \n' > ${ROOTFS}/etc/issue"
+sudo sh -c "echo 'Debian GNU/Linux 12 \134n \l \n' > ${ROOTFS}/etc/issue"
 # Copy/replace the Broadcom/Cypress 802.11 wireless card firmware
 sudo cp -rv ${SDK_DIR}/sysroots/cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi/usr/lib/firmware/* ${ROOTFS}/usr/lib/firmware/
 # Copy the GPU drivers
@@ -338,12 +338,17 @@ sudo umount ${ROOTFS}
 sudo losetup -d ${DISK}
 ```
 
-## Flash the eMMC image on target device from Linux
-Copy the `build/stm32mp1/release/tf-a-*.stm32` TF-A file (built with the `STM32MP_EMMC=1` option) to the target device.  
-Copy the eMMC version of the `*.img` file to the target device.  
-On target, call `lsblk` to determine the `eMMC` block device name. Replace the `mmcblkX` with the correct one:  
+## Flash the eMMC image on the target device from Linux
+* [Bootable eMMC](https://linux-sunxi.org/Bootable_eMMC)
+* [mmc-utils / mmc](https://manpages.debian.org/testing/mmc-utils/mmc.1.en.html)  
+
+Transfer the `build/stm32mp1/release/tf-a-*.stm32` TF-A file (built with the `STM32MP_EMMC=1` option) to the target device.  
+Transfer the eMMC image `*.img` file to the target device.  
+On target, call `lsblk` to determine the `eMMC` block device name.  
+Set the correct values for the `BLOCK_DEVICE` and `MACHINE` environment variables:  
 ```bash
 export BLOCK_DEVICE=mmcblkX
+export MACHINE=stm32mp157c-odyssey
 sudo apt install -y mmc-utils
 sudo sh -c "echo 0 > /sys/block/${BLOCK_DEVICE}boot0/force_ro"
 sudo sh -c "echo 0 > /sys/block/${BLOCK_DEVICE}boot1/force_ro"
