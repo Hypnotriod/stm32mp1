@@ -13,6 +13,9 @@ Choose the machine name:
 export MACHINE=stm32mp157f-dk2
 ```
 ```bash
+export MACHINE=stm32mp157c-dk2
+```
+```bash
 export MACHINE=stm32mp157c-odyssey
 ```
 
