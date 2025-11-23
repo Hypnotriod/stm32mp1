@@ -255,12 +255,13 @@
 	pinctrl-1 = <&usart1_sleep_pins_s>;
 	pinctrl-2 = <&usart1_idle_pins_s>;
 	uart-has-rtscts;
-	status = "disabled";
+	status = "okay";
 
 	bluetooth {
-		host-wakeup-gpios = <&gpioh 3 GPIO_ACTIVE_HIGH>;
-		device-wakeup-gpios = <&gpioh 8 GPIO_ACTIVE_HIGH>;
-		reset-gpios = <&gpioh 9 GPIO_ACTIVE_LOW>;
+		host-wakeup-gpios = <&gpioh 3 GPIO_ACTIVE_HIGH>; /* HOST_WAKE */
+		device-wakeup-gpios = <&gpioh 8 GPIO_ACTIVE_HIGH>; /* BT_WAKE */
+		reset-gpios = <&gpioh 9 GPIO_ACTIVE_LOW>; /* BT_RST_N */
+		shutdown-gpios = <&gpiog 12 GPIO_ACTIVE_HIGH>; /* WL_REG_ON ??? BT_REG_ON */
 		compatible = "brcm,bcm43438-bt";
 		max-speed = <3000000>;
 		vbat-supply = <&v3v3>;
@@ -268,7 +269,7 @@
 	};
 };
 
-/* config RTC to provide clk of ap6263 */
+/* config RTC to provide clk for the AP6236 */
 &rtc {
 	status = "okay";
 	st,lsco = <RTC_OUT2_RMP>;
