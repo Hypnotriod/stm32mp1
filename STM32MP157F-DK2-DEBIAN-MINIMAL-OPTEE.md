@@ -345,7 +345,7 @@ sudo losetup -d ${DISK}
 * [Bootable eMMC](https://linux-sunxi.org/Bootable_eMMC)
 * [mmc-utils / mmc](https://manpages.debian.org/testing/mmc-utils/mmc.1.en.html)  
 
-Transfer the `build/stm32mp1/release/tf-a-*.stm32` TF-A file (built with the `STM32MP_EMMC=1` option) to the target device.  
+Transfer the `arm-trusted-firmware/build/stm32mp1/release/tf-a-*.stm32` TF-A file (built with the `STM32MP_EMMC=1` option) to the target device.  
 Transfer the eMMC image `*.img` file to the target device.  
 On target, call `lsblk` to determine the `eMMC` block device name.  
 Set the correct values for the `BLOCK_DEVICE` and `MACHINE` environment variables:  
@@ -360,7 +360,7 @@ sudo dd if=tf-a-${MACHINE}.stm32 of=/dev/${BLOCK_DEVICE}boot1 conv=notrunc
 sudo mmc bootbus set single_backward x1 x1 /dev/${BLOCK_DEVICE}
 sudo mmc bootpart enable 1 1 /dev/${BLOCK_DEVICE}
 sudo dd if=${MACHINE}.img of=/dev/${BLOCK_DEVICE}
-# Grow the rootfs partition to the full eMMC capacity
+# Grow the rootfs partition 3 to the full eMMC capacity
 sudo parted /dev/${BLOCK_DEVICE} resizepart 3 -- -1
 sudo e2fsck -f /dev/${BLOCK_DEVICE}p3
 sudo resize2fs /dev/${BLOCK_DEVICE}p3
