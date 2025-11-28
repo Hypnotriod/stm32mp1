@@ -1,7 +1,7 @@
 # STM32MP1 Debian Linux recipes
 ![stm32mp157f-dk2-debian-gotk3-hello-world](resources/stm32mp157f-dk2-debian-gotk3-hello-world.jpg)
 
-Tested on the `STM32MP157f DK2` and `STM32MP157C ODYSSEY` platforms.  
+Tested on the `STM32MP157F DK2` and `STM32MP157C ODYSSEY` platforms.  
 Based on the Robert Nelson's (beagleboard.org) Debian minimal rootfs [builds](https://rcn-ee.com/rootfs/eewiki/minfs/).  
 Debian [logo](https://github.com/shriramters/wallpapers) by Shriram Ravindranathan.
 
