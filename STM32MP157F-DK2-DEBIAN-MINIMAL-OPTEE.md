@@ -397,3 +397,5 @@ Replace `ConditionPathIsReadWrite=/proc/sys/` with `ConditionPathIsMountPoint=/p
 #ConditionPathIsReadWrite=/proc/sys/
 ConditionPathIsMountPoint=/proc/sys/fs/binfmt_misc
 ```
+* `STM32MP157C ODYSSEY` Bluetooth is not working.  
+  No solution yet.
