@@ -261,7 +261,6 @@
 		host-wakeup-gpios = <&gpioh 3 GPIO_ACTIVE_HIGH>; /* HOST_WAKE */
 		device-wakeup-gpios = <&gpioh 8 GPIO_ACTIVE_HIGH>; /* BT_WAKE */
 		reset-gpios = <&gpioh 9 GPIO_ACTIVE_LOW>; /* BT_RST_N */
-		shutdown-gpios = <&gpiog 12 GPIO_ACTIVE_HIGH>; /* WL_REG_ON ??? BT_REG_ON */
 		compatible = "brcm,bcm43438-bt";
 		max-speed = <3000000>;
 		vbat-supply = <&v3v3>;
