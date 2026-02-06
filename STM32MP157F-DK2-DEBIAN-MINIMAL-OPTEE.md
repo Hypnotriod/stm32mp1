@@ -127,27 +127,21 @@ make realclean
 ```
 In case of the `SD card` do:
 ```bash
-make PLAT=stm32mp1 \
-    STM32MP13=0 \
-    STM32MP15=1 \
-    STM32MP_SDMMC=1 \
-    ARCH=aarch32 \
-    ARM_ARCH_MAJOR=7 \
-    AARCH32_SP=optee \
-    DTB_FILE_NAME=${MACHINE}.dtb \
-    BL33=${UBOOT_DIR}/out/u-boot-nodtb.bin \
-    BL33_CFG=${UBOOT_DIR}/out/u-boot.dtb \
-    BL32=${OPTEE_DIR}/build/core/tee-header_v2.bin \
-    BL32_EXTRA1=${OPTEE_DIR}/build/core/tee-pager_v2.bin \
-    BL32_EXTRA2=${OPTEE_DIR}/build/core/tee-pageable_v2.bin \
-    all fip
+export STM32MP_SDMMC=1
+export STM32MP_EMMC=0
 ```
 In case of the `eMMC` do:
+```bash
+export STM32MP_EMMC=1
+export STM32MP_SDMMC=0
+```
+Build the `TF-A` and `FIP`:
 ```bash
 make PLAT=stm32mp1 \
     STM32MP13=0 \
     STM32MP15=1 \
-    STM32MP_EMMC=1 \
+    STM32MP_SDMMC=${STM32MP_SDMMC} \
+    STM32MP_EMMC=${STM32MP_EMMC} \
     ARCH=aarch32 \
     ARM_ARCH_MAJOR=7 \
     AARCH32_SP=optee \
