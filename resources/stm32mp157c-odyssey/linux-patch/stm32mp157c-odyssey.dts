@@ -254,7 +254,8 @@
 	pinctrl-0 = <&usart1_pins_s>;
 	pinctrl-1 = <&usart1_sleep_pins_s>;
 	pinctrl-2 = <&usart1_idle_pins_s>;
-	uart-has-rtscts;
+	cts-gpios = <&gpioz 3 GPIO_ACTIVE_LOW>;
+	rts-gpios = <&gpioz 5 GPIO_ACTIVE_LOW>;
 	status = "okay";
 
 	bluetooth {
