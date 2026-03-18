@@ -186,31 +186,22 @@
 	// usart1 pin configure
 	usart1_pins_s: usart1-0 {
 		pins1 {
-			pinmux = <STM32_PINMUX('Z', 7, AF7)>, /* USART1_TX */
-				<STM32_PINMUX('Z', 5, AF7)>; /* USART1_RTS */
+			pinmux = <STM32_PINMUX('Z', 7, AF7)>; /* USART1_TX */
 			bias-disable;
 			drive-push-pull;
 			slew-rate = <0>;
 		};
 		pins2 {
-			pinmux = <STM32_PINMUX('Z', 6, AF7)>, /* USART1_RX */
-				<STM32_PINMUX('Z', 3, AF7)>; /* USART1_CTS_NSS */
+			pinmux = <STM32_PINMUX('Z', 6, AF7)>; /* USART1_RX */
 			bias-disable;
 		};
 	};
 
 	usart1_idle_pins_s: usart1-idle-0 {
 		pins1 {
-			pinmux = <STM32_PINMUX('Z', 7, ANALOG)>, /* USART1_TX */
-				<STM32_PINMUX('Z', 3, ANALOG)>; /* USART1_CTS_NSS */
+			pinmux = <STM32_PINMUX('Z', 7, ANALOG)>; /* USART1_TX */
 		};
 		pins2 {
-			pinmux = <STM32_PINMUX('Z', 5, AF7)>; /* USART1_RTS */
-			bias-disable;
-			drive-push-pull;
-			slew-rate = <0>;
-		};
-		pins3 {
 			pinmux = <STM32_PINMUX('Z', 6, AF7)>; /* USART1_RX */
 			bias-disable;
 		};
@@ -219,9 +210,7 @@
 	usart1_sleep_pins_s: usart1-sleep-0 {
 		pins {
 			pinmux = <STM32_PINMUX('Z', 7, ANALOG)>, /* USART1_TX */
-				<STM32_PINMUX('Z', 5, ANALOG)>, /* USART1_RTS */
-				<STM32_PINMUX('Z', 6, ANALOG)>, /* USART1_RX */
-				<STM32_PINMUX('Z', 3, ANALOG)>; /* USART1_CTS_NSS */
+				<STM32_PINMUX('Z', 6, ANALOG)>; /* USART1_RX */
 		};
 	};
 };
