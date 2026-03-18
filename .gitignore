@@ -1,7 +1,7 @@
-gotk3-example/bin
-sdk/
-u-boot/
-optee_os/
-arm-trusted-firmware/
-linux/
-debian*/
+/gotk3-example/bin
+/sdk/
+/u-boot/
+/optee_os/
+/arm-trusted-firmware/
+/linux/
+/debian*/
